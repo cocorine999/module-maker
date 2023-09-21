@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}}\Contracts;
+
+use LaravelCoreModule\CoreModuleMaker\Services\RestJson\Contracts\RestJsonQueryServiceContract;
+
+
+/**
+ * Interface ***`{{moduleName}}RESTfulQueryServiceContract`***
+ *
+ * The `{{moduleName}}RESTfulQueryServiceContract` interface is a contract that defines the methods
+ * for a RESTful query service specific to {{moduleName}} resources.
+ *
+ * This interface extends the RestJsonQueryServiceContract interface, which provides
+ * a set of common methods for performing RESTful queries on JSON-based resources.
+ *
+ * Implementing classes should provide the necessary implementation for each method
+ * defined in this interface, which includes `querying`, `filtering`, `sorting`, `pagination`,
+ * and other operations specific to {{moduleName}} resources.
+ *
+ * @package ***`\{{namespace}}\Contracts`***
+ */
+interface {{moduleName}}RESTfulQueryServiceContract extends RestJsonQueryServiceContract
+{
+
+}

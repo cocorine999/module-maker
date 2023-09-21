@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use App\Models\{{modelName}};
+use LaravelCoreModule\CoreModuleMaker\Repositories\Eloquent\EloquentReadWriteRepository;
+
+
+/**
+ * ***`{{modelName}}ReadWriteRepository`***
+ *
+ * This class extends the EloquentReadWriteRepository class, which suggests that it is responsible for providing read-only access to the {{moduleName}} $instance data.
+ *
+ * @package ***`{{namespace}}`***
+ */
+class {{modelName}}ReadWriteRepository extends EloquentReadWriteRepository
+{
+    /**
+     * Create a new {{modelName}}ReadWriteRepository instance.
+     *
+     * @param  \App\Models\{{modelName}} $model
+     * @return void
+     */
+    public function __construct({{modelName}} $model)
+    {
+        parent::__construct($model);
+    }
+}

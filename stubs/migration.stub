@@ -1,0 +1,94 @@
+<?php
+
+declare(strict_types=1);
+
+use LaravelCoreModule\CoreModuleMaker\Helpers\Traits\Database\Backup\BackupDatabaseTrait;
+use LaravelCoreModule\CoreModuleMaker\Helpers\Traits\Database\Migrations\TableMigrationTrait;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+
+/**
+ * Class ***`{{className}}`***
+ *
+ * A migration class for creating the "{{table_name}}" table with UUID primary key and timestamps.
+ *
+ * @package ***`\Database\Migrations\{{className}}`***
+ */
+class {{className}} extends Migration
+{
+
+    use BackupDatabaseTrait, TableMigrationTrait;
+
+    /**
+     * A record of a table can be delete
+     *
+     * @var boolean
+     */
+    protected bool $can_be_deleted = true;
+
+    /**
+     * Run the migrations.
+     * 
+     * @return void
+     * 
+     * @throws \Throwable
+     * @throws \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException If the migration fails.
+     */
+    public function up(): void
+    {
+        
+        // Backup the database before running the migration
+        // $this->backupDatabase();
+
+        // Begin the database transaction
+        DB::beginTransaction();
+
+        try {
+
+            $this->{{action}}Table(table_name: '{{table_name}}', can_be_deleted: $this->can_be_deleted, column_definition: function (Blueprint $table) {
+                {{columns}}
+            });
+
+            // Commit the transaction
+            DB::commit();
+        } catch (\Throwable $exception) {
+            // Rollback the transaction in case of an exception
+            DB::rollBack();
+
+            // Handle the exception (e.g., logging, notification, etc.)
+            throw new \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException(message: 'Failed to migrate "{{table_name}}" table: ' . $exception->getMessage(), previous: $exception);
+        }
+    }
+
+
+    /**
+     * Reverse the migrations.
+     * 
+     * @return void
+     * 
+     * @throws \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException
+     */
+    public function down(): void
+    {
+        // Begin the database transaction
+        DB::beginTransaction();
+
+        try {
+            // Drop the "{{table_name}}" table if it exists
+            Schema::dropIfExists('{{table_name}}');
+
+            // Commit the transaction
+            DB::commit();
+        } catch (\Throwable $exception) {
+            // Rollback the transaction in case of an exception
+            DB::rollBack();
+
+            // Handle the exception (e.g., logging, notification, etc.)
+            throw new \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException(message: 'Failed to drop "{{table_name}}" table: ' . $exception->getMessage(), previous: $exception);
+        }
+    }
+
+}

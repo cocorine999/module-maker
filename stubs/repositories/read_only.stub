@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use App\Models\{{modelName}};
+use LaravelCoreModule\CoreModuleMaker\Repositories\Eloquent\EloquentReadOnlyRepository;
+
+
+/**
+ * ***`{{modelName}}ReadOnlyRepository`***
+ *
+ * This class extends the EloquentReadOnlyRepository class, which suggests that it is responsible for providing read-only access to the {{moduleName}} $instance data.
+ *
+ * @package ***`\{{namespace}}`***
+ */
+class {{modelName}}ReadOnlyRepository extends EloquentReadOnlyRepository
+{
+    /**
+     * Create a new {{modelName}}ReadOnlyRepository instance.
+     *
+     * @param  \App\Models\{{modelName}} $model
+     * @return void
+     */
+    public function __construct({{modelName}} $model)
+    {
+        parent::__construct($model);
+    }
+}

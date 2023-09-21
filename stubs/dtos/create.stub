@@ -1,0 +1,83 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use App\Models\{{modelName}};
+use LaravelCoreModule\CoreModuleMaker\Rules\ExistsForAuthUserAndUUID;
+use LaravelCoreModule\CoreModuleMaker\DataTransfertObjects\BaseDTO;
+
+
+/**
+ * Class ***`{{CreateDtoName}}`***
+ *
+ * This class extends the ***`BaseDTO`*** class.
+ * It represents the data transfer object for creating a new ***`{{modelName}}`*** model.
+ *
+ * @package ***`\{{namespace}}`***
+ */
+class {{CreateDtoName}} extends BaseDTO
+{
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    /**
+     * Get the class name of the model associated with the DTO.
+     *
+     * @return string The class name of the model.
+     */
+    protected function getModelClass(): string
+    {
+        return {{modelName}}::class;
+    }
+
+    /**
+     * Get the validation rules for the DTO object.
+     *
+     * @return array The validation rules.
+     */
+    public function rules(array $rules = []): array
+    {
+        $rules = array_merge([
+            {{rules}}
+            "created_by"            => [
+                                        "sometimes",
+                                        "string",
+                                        "uuid",
+                                        new ExistsForAuthUserAndUUID
+            ],
+            'can_be_delete'         => ['sometimes', 'boolean', 'in:'.true.','.false]
+        ], $rules);
+
+        return $this->rules = parent::rules($rules);
+    }
+
+    /**
+     * Get the validation error messages for the DTO object.
+     *
+     * @return array The validation error messages.
+     */
+    public function messages(array $messages = []): array
+    {
+        $default_messages = array_merge([
+            "created_by.required"    => "Le champ created_by est requis.",
+            "created_by.string"      => "Le champ created_by doit être une chaîne de caractères.",
+            "created_by.uuid"        => "Le champ created_by doit être un UUID valide.",
+            "created_by.exists"      => "Le champ created_by est invalide.",
+
+            "status.boolean"        => "Le champ status doit être un booléen.",
+            "status.in"             => "Le status doit être 'true' ou 'false'.",
+
+            'can_be_delete.boolean' => 'Le champ can_be_delete doit être un booléen.',
+            'can_be_delete.in'      => 'Le can_be_delete doit être "true" ou "false".'
+        ], $messages);
+
+        $messages = array_merge({{messages}}, $default_messages);
+
+        return $this->messages = parent::messages($messages);
+    }
+}

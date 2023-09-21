@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use LaravelCoreModule\CoreModuleMaker\Services\Contracts\ReadWriteServiceContract;
+use LaravelCoreModule\CoreModuleMaker\Services\RestJson\RestJsonReadWriteService;
+use {{namespace}}\Contracts\{{moduleName}}RESTfulReadWriteServiceContract;
+
+
+/**
+ * The ***`{{moduleName}}RESTfulReadWriteService`*** class provides RESTful CRUD operations for the "{{moduleName}}" resource.
+ *
+ * This service class extends the `RestJsonReadWriteService` class to handle the read and write operations for the "{{moduleName}}" resource.
+ * It implements the `{{moduleName}}RESTfulReadWriteServiceContract` interface that defines the contract for this service.
+ * The class leverages the `JsonResponseTrait` to create consistent JSON responses with `success`, `error`, and `validation` error structures.
+ *
+ * @package ***`\{{namespace}}`***
+ */
+class {{moduleName}}RESTfulReadWriteService extends RestJsonReadWriteService implements {{moduleName}}RESTfulReadWriteServiceContract
+{
+    /**
+     * Constructor for the {{moduleName}}RESTfulReadWriteService class.
+     *
+     * @param ReadWriteServiceContract $readWriteService The query service instance to be used.
+     */
+    public function __construct(ReadWriteServiceContract $readWriteService)
+    {
+        parent::__construct($readWriteService);
+    }
+}

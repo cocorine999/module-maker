@@ -1,0 +1,121 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use LaravelCoreModule\CoreModuleMaker\Eloquents\Contract\ModelContract;
+{{importation}}
+
+
+/**
+ * Class ***`{{modelName}}`***
+ *
+ * This model represents the `{{table}}` table in the database.
+ * It extends the ModelContract class and provides access to the database table associated with the model.
+ *
+ *
+ * {{properties}}
+ * 
+ * @package ***`\App\Models`***
+ */
+class {{modelName}} extends ModelContract
+{
+    {{trait}}
+
+    /**
+     * The database connection that should be used by the model.
+     *
+     * @var string
+     */
+    protected $connection = '{{connection}}';
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = '{{table}}';
+
+    /** 
+     * The attributes that aren't mass assignable.
+     *
+     * @var array<int, string>
+     */
+    public $guarded = [];
+
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        {{fillableAttributes}}
+    ];
+
+    /**
+     * The attributes that should be treated as dates.
+     *
+     * @var array<int, string>
+     */
+    protected $dates = [
+        {{datesFillable}}
+    ];
+
+    /**
+     * The model's default attribute values.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        {{attributes}}
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+
+    ];
+
+    /**
+     * The attributes that should be visible in arrays.
+     *
+     * @var array<int, string>
+     */
+    protected $visible = [
+        
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        {{fillableCast}}
+    ];
+
+
+    /**
+     * The accessors to append to the model's array and JSON representation.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+
+    ];
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array<int, string>
+     */
+    protected $with = [
+
+    ];
+
+}

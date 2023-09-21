@@ -1,0 +1,21 @@
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class Create{{ ucfirst($table) }}Table extends Migration
+{
+    public function up()
+    {
+        Schema::create('{{ $table }}', function (Blueprint $table) {
+            @foreach($columns as $column)
+                $table->{{ $column['type'] }}('{{ $column['name'] }}')@if($column['default'] !== '')->default('{{ $column['default'] }}')@endif;
+            @endforeach
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('{{ $table }}');
+    }
+}

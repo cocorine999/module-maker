@@ -1,0 +1,13 @@
+<?php
+
+class DateTimeResource extends JsonRsource
+{
+    public function toArray($request)
+    {
+        return [
+            'datetime' => $this->toISOString(),
+            'human_diff' => $this->diffForHumans(),
+            'human' => $this->toDayDateTimeString(),
+        ];
+    }
+}

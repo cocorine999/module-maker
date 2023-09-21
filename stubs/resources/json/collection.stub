@@ -1,0 +1,195 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use Illuminate\Http\Resources\Json\JsonResource;
+use LaravelCoreModule\CoreModuleMaker\Resources\DateTimeResource;
+
+
+/**
+ *  ***`{{resourceName}}`***
+ *
+ * This class extends the JsonResource class and provides a transformation
+ * layer for presenting `{{model}}` data in API responses. It includes methods to
+ * customize attribute presentation, manage relationships, and handle
+ * sensitive information. The `{{resourceName}}` class helps maintain a consistent
+ * and well-structured API output for user-related data.
+ *
+ * @package ***`\{{namespace}}`***
+ */
+class {{resourceName}} extends JsonResource
+{
+    /**
+     * Determines whether sensitive attributes should be displayed.
+     *
+     * @var bool
+     */
+    protected $showSensitiveAttributes = false;
+
+    /**
+     * List of attributes considered sensitive and excluded from resource output.
+     *
+     * @var string[]
+     */
+    protected $sensitiveAttributes = [];
+
+    /**
+     * List of attributes to be included in the resource representation.
+     *
+     * @var string[]
+     */
+    public $attributes = [
+        {{attributes}},
+        'created_at'
+    ];
+
+    /**
+     * List of relationships to be included in the resource representation.
+     *
+     * @var string[]
+     */
+    public $relationships = [
+        {{relationships}}
+    ];
+
+
+    /**
+     * Transform the resource into an array.
+     *
+     * @param \Illuminate\Http\Request  $request
+     * @return array<string, mixed>
+     */
+    public function toArray($request)
+    {
+        return [
+            {{resource}},
+            ...$this->toAttributes($request),
+            ...$this->toRelationships($request)
+            /*
+                $this->mergeWhen($this->showSensitiveAttributes, $this->sensitiveAttributes),
+                
+                'attributes' => (object) $this->requestedAttributes($request)->all(),
+                'relationships' => (object) $this->requestedRelationshipsAsIdentifiers($request)->all()
+            */
+        ];
+    }
+
+
+    /**
+     * Get the JSON serialization options that should be applied.
+     * 
+     * @return int
+     */
+    public function jsonOptions(): int
+    {
+        return JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK;
+    }
+    
+    /**
+     * Get the resource's attributes.
+     * @api
+     * 
+     * @param \Illuminate\Http\Request|null $request
+     * @return array<string, mixed>
+     */
+    protected function toAttributes(\Illuminate\Http\Request $request): array
+    {
+        return [
+            'created_at' => new DateTimeResource($this->created_at)
+        ];
+    }
+
+    /**
+     * Get the resource's relationships.
+     *
+     * @param \Illuminate\Http\Request|null $request
+     * @return array<string, mixed>
+     */
+    protected function toRelationships(\Illuminate\Http\Request $request): array
+    {
+        $relations = [];
+
+        foreach ($this->relationships as $key => $value) {
+            $relations [] = $this->relation("$value");
+        }
+        return $relations;
+    }
+
+    public function mapInto()
+    {
+        return static::class;
+    }
+
+    /**
+     * Define additional optional properties.
+     *
+     * @param  array $request
+     * @return array
+     */
+    public function with($request)
+    {
+        return [
+            'extra' => [
+                {{extra}}
+            ],
+            'meta' => [
+                'version' => '1.0',
+                'deprecated' => false
+            ]
+        ];
+    }
+
+    public function withWrap($key = 'data')
+    {
+        return parent::withWrap($key);
+    }
+
+    public function additional($request)
+    {
+        return [{{additional}}
+            'status' => 'success',
+            'message' => 'Resource retrieved successfully.'
+        ];
+    }
+
+    // Define additional optional transformation
+    public function additionalTransformation($data)
+    {
+        return [
+            {{additionalTransformation}}
+        ];
+    }
+
+    /**
+     * Customize the outgoing response for the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Response  $response
+     */
+    public function withResponse($request, $response): void
+    {
+        $response->header('X-Value', 'True');
+    }
+
+    /**
+     * Allow sensitive information to be returned.
+     */
+    public function withSensitiveAttributes(bool $value = true): self
+    {
+        $this->showSensitiveAttributes = $value;
+
+        return $this;
+    }
+
+    /**
+     * Allow sensitive information to be returned.
+     */
+    public function sensitiveAttributes(bool $value = true): self
+    {
+        $this->sensitiveAttributes = $value;
+
+        return $this;
+    }
+}

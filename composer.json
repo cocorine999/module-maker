@@ -1,0 +1,110 @@
+{
+    "name": "laravel-core-modules/core-modules-maker",
+    "description": "This is my package core-modules-maker",
+    "keywords": [
+        "laravel-core-modules",
+        "laravel",
+        "core-modules-maker"
+    	"service-repository",
+    	"repository",
+    	"service",
+    	"data-transfert-object",
+    	"dto",
+    	"trait",
+    	"rules",
+    	"request",
+    	"routes",
+    	"controller",
+    	"provider",
+    	"modules",
+    	"migrations",
+    	"dependency-injection"
+    ],
+    "homepage": "https://github.com/laravel-core-modules.github.io",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Corine BOCOGA",
+            "email": "cocorine999@gmail.com",
+      	    "homepage": "https://cocorine999.github.io",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "doctrine/dbal": "^3.6",
+        "illuminate/contracts": "^10.0",
+        "spatie/laravel-package-tools": "^1.14.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^7.8",
+        "nunomaduro/larastan": "^2.0.1",
+        "orchestra/testbench": "^8.8",
+        "pestphp/pest": "^2.0",
+        "pestphp/pest-plugin-arch": "^2.0",
+        "pestphp/pest-plugin-laravel": "^2.0",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "spatie/laravel-ray": "^1.26"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaravelCoreModule\\CoreModuleMaker\\": "src/",
+            "LaravelCoreModule\\CoreModuleMaker\\Database\\Factories\\": "database/factories/"
+        },
+        "files": [
+            "helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaravelCoreModule\\CoreModuleMaker\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@composer run prepare",
+            "@php artisan vendor:publish --tag=core-modules-maker--force"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-core-modules-maker --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": [
+            "@composer run prepare",
+            "@php vendor/bin/testbench workbench:build --ansi"
+        ],
+        "start": [
+            "Composer\\Config::disableProcessTimeout",
+            "@composer run build",
+            "@php vendor/bin/testbench serve"
+        ],
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaravelCoreModule\\CoreModuleMaker\\CoreModuleMakerServiceProvider"
+            ],
+            "aliases": {
+                "CoreModuleMaker": "LaravelCoreModule\\CoreModuleMaker\\Facades\\CoreModuleMaker"
+            },
+            "publish": {
+                "resources/lang" : "resources/lang/laravel-core-modules/core-modules-maker"
+            }
+        }
+    },
+    "minimum-stability": "dev-beta",
+    "prefer-stable": true
+}

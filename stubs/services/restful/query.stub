@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use LaravelCoreModule\CoreModuleMaker\Services\Contracts\QueryServiceContract;
+use LaravelCoreModule\CoreModuleMaker\Services\RestJson\RestJsonQueryService;
+use {{namespace}}\Contracts\{{moduleName}}RESTfulQueryServiceContract;
+
+
+/**
+ * Class ***`{{moduleName}}RESTfulQueryService`***
+ *
+ * The `{{moduleName}}RESTfulQueryService` class is responsible for providing a RESTful implementation of the query service for the {{moduleName}}s module.
+ * It extends the `RestJsonQueryService` class provided by the Core module and implements the `{{moduleName}}RESTfulQueryServiceContract` interface.
+ *
+ * The `{{moduleName}}RESTfulQueryService` class primarily serves as a wrapper around the underlying query service, providing RESTful capabilities for querying {{moduleName}} resources.
+ *
+ * @package ***`\{{namespace}}`***
+ */
+class {{moduleName}}RESTfulQueryService extends RestJsonQueryService implements {{moduleName}}RESTfulQueryServiceContract
+{
+    /**
+     * Constructor for the {{moduleName}}RESTfulQueryService class.
+     *
+     * @param QueryServiceContract $queryService The query service instance to be used.
+     */
+    public function __construct(QueryServiceContract $queryService)
+    {
+        parent::__construct($queryService);
+    }
+}

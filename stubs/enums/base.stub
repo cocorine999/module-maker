@@ -1,0 +1,68 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use LaravelCoreModule\CoreModuleMaker\Helpers\Enums\Contracts\EnumContract;
+use LaravelCoreModule\CoreModuleMaker\Helpers\Mixins\IsEnum;
+
+
+/**
+ * Class ***`{{enumName}}`***
+ *
+ * This class represents the enumeration of {{subject}}s in the application.
+ * It defines the available {{subject}}s as constants, including {{enums}}.
+ * 
+ * The default lead status is set to `{{default}}`.
+ *
+ * @method static array labels()
+ *     Get the labels for the {{subject}}s.
+ *     Returns an array with the labels for the {{subject}}s, where the keys are the {{subject}} constants and the values are the corresponding labels.
+ *
+ * @method static array descriptions()
+ *     Get the descriptions for the {{subject}}s.
+ *     Returns an array with the descriptions for the {{subject}}s, where the keys are the {{subject}} constants and the values are the corresponding descriptions.
+ *
+ * @package ***`\{{namespace}}`***;
+ */
+enum {{enumName}}: {{type}} implements EnumContract
+{
+    use IsEnum;
+
+    {{enumerations}}
+
+    /**
+     * The default {{subject}} value.
+     * 
+     * @return {{type}}
+     */
+    public const DEFAULT          = {{default}};
+    
+    /**
+     * The fallback {{subject}} value.
+     * 
+     * @return {{type}}
+     */
+    public const FALLBACK         = {{fallback}};
+
+    /**
+     * Get the labels for the {{subject}}s.
+     *
+     * @return array The labels for the {{subject}}s.
+     */
+    public static function labels(): array
+    {
+        return {{labels}};
+    }
+
+    /**
+     * Get all the {{subject}}s enum descriptions as an array.
+     *
+     * @return array An array containing all the descriptions for the enum values.
+     */
+    public static function descriptions(): array
+    {
+        return {{descriptions}};
+    }
+}

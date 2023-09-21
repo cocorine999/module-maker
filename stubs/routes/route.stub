@@ -1,0 +1,161 @@
+<?php
+
+use App\Http\Controllers\APIs\RESTful\V1\Auth\AccountActivationController;
+use App\Http\Controllers\APIs\RESTful\V1\Auth\EmailVerificationController;
+use App\Http\Controllers\APIs\RESTful\V1\Auth\RegistrationController;
+use App\Http\Controllers\APIs\RESTful\V1\Auth\UserRegistrationPreferenceController;
+use App\Http\Controllers\APIs\RESTful\V1\Auth\UserVerificationPreferenceController;
+use App\Http\Controllers\APIs\RESTful\V1\FilterUserController;
+use App\Http\Controllers\APIs\RESTful\V1\ProfileController;
+use App\Http\Controllers\APIs\RESTful\V1\UserController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
+|
+*/
+
+Route::namespace("{{namespace}}")->middleware([])->group(function () {
+
+
+    Route::name('v1.')->group(function () {
+
+        /*
+        |--------------------------------------------------------------------------
+        | User Routes
+        |--------------------------------------------------------------------------
+        |
+        | This group contains the API resource routes for the 'users' module.
+        | These routes are handled by the 'UserController' controller.
+        | The route parameter 'users' is aliased as 'id_user'.
+        |
+        */
+        // Routes for 'users' resource
+        Route::name('users.')->group(function () {
+            Route::prefix('users')->group(function () {
+
+                // Get all users
+                Route::get('/',                                              [UserController::class, 'index'])->name('index');
+
+                // Create a new user
+                Route::post('/',                                             [UserController::class, 'storeUser'])->name('store');
+
+                // Get a single user by ID
+                Route::get('{user}',                                         [UserController::class, 'show'])->name('show');
+
+                // Update an existing user
+                Route::put('{user}',                                         [UserController::class, 'updateUser'])->name('update');
+
+                // Soft delete an user
+                Route::delete('{user}',                                      [UserController::class, 'softDelete'])->name('soft-delete');
+
+                // Permanently delete an user
+                Route::delete('{user}/permanently',                          [UserController::class, 'permanentDelete'])->name('permanently');
+
+                // User Status Management
+                Route::group([], function () {
+
+                    Route::put('/{user}/activate',                           [UserController::class, 'activateUser'])->name('active_user');
+                    Route::put('/{user}/deactivate',                         [UserController::class, 'deactivateUser'])->name('deactivate_user');
+                    Route::put('/{user}/suspend',                            [UserController::class, 'suspendUser'])->name('suspend_user');
+                    Route::put('/{user}/unsuspend',                          [UserController::class, 'unsuspendUser'])->name('unsuspend_user');
+                });
+
+                // User Profile
+                Route::put('/{user}/profile', [ProfileController::class, 'updateProfile'])
+                    ->name('update_profile');
+
+                // Update User Image
+                Route::put('/{user}/image', [ProfileController::class, 'updateImage'])
+                    ->name('update_image');
+
+                // Get User Avatar
+                Route::get('/{user}/avatar', [ProfileController::class, 'avatar'])
+                    ->name('avatar');
+
+            });
+
+            Route::prefix('trash-users')->group(function () {
+
+                // Get trashed users
+                Route::get('/',                                              [UserController::class, 'loadTrash'])->name('trashed');
+
+                // Restore an user from trash
+                Route::patch('{user}/restore',                               [UserController::class, 'restoreFromTrash'])->name('restore-from-trash');
+
+                // Restore all users from trash
+                Route::patch('restore-all',                                  [UserController::class, 'restoreAllFromTrash'])->name('restore-all');
+
+                // Permanently delete an user from trash
+                Route::delete('{user}/delete-permanently',                   [UserController::class, 'deletePermanentlyFromTrash'])->name('delete-permanently-from-trash');
+
+                // Empty the trash (permanently delete all trashed users)
+                Route::delete('empty',                                       [UserController::class, 'emptyTrash'])->name('empty-trash');;
+            });
+
+            Route::group([], function () {
+
+                // Filter Users (via POST request)
+                Route::post('/filter-users',                                [FilterUserController::class, 'filterUsers'])
+                    ->name('filter');
+
+                // Filter Users by Date Range
+                Route::get('/users/filter-by-date-range',                   [FilterUserController::class, 'filterByDateRange'])
+                    ->name('filter.by_date_range');
+
+                // Filter Users by Status
+                Route::get('/users/filter-by-status',                       [FilterUserController::class, 'filterByStatus'])
+                    ->name('filter.by_status');
+
+                // Filter Users by Role
+                Route::get('/users/filter-by-role',                         [FilterUserController::class, 'filterByRole'])
+                    ->name('filter.by_role');
+
+            });
+        });
+
+
+        Route::/* prefix('user-registration')->name('registration.')-> */group([], function () {
+
+            // User Registration
+            Route::post('/register',                                        [RegistrationController::class, 'register']);
+
+            // Email Verification
+            Route::post('/verify-email',                                    [EmailVerificationController::class, 'verifyEmail']);
+            Route::get('/verify-email/{verification_token}',                [EmailVerificationController::class, 'verifyEmailToken']);
+
+            // Account Activation
+            Route::get('/activate-account/{activation_token}',              [AccountActivationController::class, 'activateAccount']);
+            Route::get('/activate/{activation_token}',                      [AccountActivationController::class, 'activate']);
+
+            // Resend Verification Email
+            Route::post('/resend-verification-email',                       [EmailVerificationController::class, 'resendVerificationEmail']);
+
+            Route::group([], function () {
+
+                // Endpoint for fetching user registration preferences
+                Route::get('/registration-preferences',                     [UserRegistrationPreferenceController::class, 'getRegistrationPreferences'])
+                    ->name('registration_preferences');
+
+                // Endpoint for updating user registration preferences
+                Route::put('/registration-preferences',                     [UserRegistrationPreferenceController::class, 'updateRegistrationPreferences'])
+                    ->name('update_registration_preferences');
+
+                // Endpoint for fetching user verification preferences
+                Route::get('/verification-preferences',                     [UserVerificationPreferenceController::class, 'getVerificationPreferences'])
+                    ->name('verification_preferences');
+
+                // Endpoint for updating user verification preferences
+                Route::put('/verification-preferences',                     [UserVerificationPreferenceController::class, 'updateVerificationPreferences'])
+                    ->name('update_verification_preferences');
+            });
+        });
+    });
+});
