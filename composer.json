@@ -105,6 +105,6 @@
             }
         }
     },
-    "minimum-stability": "dev-main",
+    "minimum-stability": "dev-beta",
     "prefer-stable": true
 }
