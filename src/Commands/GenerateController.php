@@ -94,7 +94,15 @@ class GenerateController extends Command
         $namespace = $namespace ?? ucfirst($path);
         $namespace = str_replace('/', '\\', $namespace);
 
-        $requestPath = "app/Http/Requests/" . ucfirst($this->option("api-version")) . "/{$this->option('model')}s/" . strtolower($this->option("api-version"));
+        
+        $requestPath = "app/Http/Requests/" . ucfirst($this->option("api-version"));
+
+        if($this->option('model'))
+        {
+        
+            $requestPath .= "/{$this->option('model')}s/" . strtolower($this->option("api-version"));
+
+        }
 
         $requestNamespace = str_replace('/', '\\', ucfirst($requestPath));
 
@@ -145,8 +153,10 @@ class GenerateController extends Command
                 '--versionning'     => $this->option('api-version'),
                 '--force'     => $this->option('force'),
             ];
-    
-            $route_resource = convert_to_kebab_case($this->option('model'));
+
+            $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
+      
+            $route_resource = convert_to_kebab_case($modelName);
 
             $this->call('generate:resource-routes', [
                 'name' => $route_resource,

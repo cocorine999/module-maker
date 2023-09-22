@@ -4,6 +4,7 @@ namespace LaravelCoreModule\CoreModuleMaker\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class GenerateCrudRoutes extends Command
 {
@@ -76,9 +77,9 @@ class GenerateCrudRoutes extends Command
     public function handle()
     {
         // Prompt user for input (e.g., resource name)
-        //$resourceName = $this->ask('Enter the resource name (singular, lowercase):');
+        $resourceName = $this->argument('name') ?? $this->ask('Enter the resource name (singular, lowercase):');
 
-        $resourceName = $this->argument('name');
+        $resourceName = Str::studly(convertToSnakeCase($resourceName));
         ///$controllerStub = file_get_contents("./../stubs/controller.stub");
 
         // Define the base directory of the package

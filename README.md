@@ -56,7 +56,7 @@ php artisan vendor:publish --tag="core-modules-maker-views"
 You can use the following Artisan command to generate a new enum class:
 
 ```php
-php artisan generate:migration UserType
+php artisan generate:migration CreateTestsTable --create=tests --columns='{"reference": {"type": "string", "nullable": false, "default": null}}' --model=Test
 ```
 
 Now, you just need to add the possible values your enum can have as constants.

@@ -48,8 +48,12 @@ class GenerateModel extends Command
         // Check if the model file already exists
         $modelFilePath = app_path('Models/'.$name.'.php');
         if (File::exists($modelFilePath) && !$this->option('force')) {
+
             $this->warn('Model already exists. Please choose a different name.');
-            return;
+
+            $create_model = $this->ask("Do you want to force create this model (y/n) ", 'y');
+            
+            if($create_model === 'n') return;
         }
 
         $namespace = $this->option('namespace');

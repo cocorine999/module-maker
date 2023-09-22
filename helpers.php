@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 
+use function Laravel\Prompts\error;
 
 if (!function_exists('core_path')) {
 
@@ -55,6 +58,105 @@ if (!function_exists('generate_path')) {
         }
     }
 }
+
+if (!function_exists('loadModel')) {
+
+    function loadModel(string $className)
+    {
+        $modelNamespace = 'App\\Models\\';
+        $fullClassName = $modelNamespace . $className;
+
+        if (class_exists($fullClassName)) {
+            return new $fullClassName;
+        }
+
+        return null;
+    }
+}
+
+function loadTables()
+{
+    $tables = [];
+
+    foreach (getModelsInFolder(app_path('Models')) as $model) {
+        $tables[] = $model->getTable();
+    }
+
+    return $tables;
+}
+
+if (!function_exists('loadModels')) {
+    function loadModels()
+    {
+        $models = getModelsInFolder(app_path('Models'));
+
+        $tables = [];
+
+        foreach ($models as $model) {
+            $modelName = class_basename($model);
+            $tableName = $model->getTable();
+
+            $tables[] = $model->getTable();
+
+            // You can use $modelName and $tableName as needed.
+            // For example, you can log them or store them in a configuration file.
+            // In this example, we'll print them.
+            echo "Model: $modelName, Table: $tableName" . PHP_EOL;
+        }
+
+        /* $modelsPath = app_path('Models'); // Change the folder path as needed
+
+        $models = File::files($modelsPath);
+
+        foreach ($models as $model) {
+            $className = 'App\\Models\\' . pathinfo($model, PATHINFO_FILENAME);
+            
+            if (class_exists($className)) {
+                $tableName = with(new $className)->getTable();
+                dump("Model: $className, Table: $tableName");
+            }
+        } */
+
+        return $tables;
+
+    }
+}
+
+
+function getModelsInFolder($folder)
+{
+    $models = [];
+    $files = scandir($folder);
+
+    foreach ($files as $file) {
+        if ($file === '.' || $file === '..') {
+            continue;
+        }
+
+        $filePath = $folder . '/' . $file;
+        $className = Str::before($file, '.php');
+
+        if (is_file($filePath) && class_exists($className)) {
+            $models[] = new $className();
+        }
+    }
+
+    return $models;
+}
+
+if (!function_exists('class_exists')) {
+    /**
+     * Check if a class exists in the Laravel application.
+     *
+     * @param string $className
+     * @return bool
+     */
+    function classExists($className)
+    {
+        return class_exists($className);
+    }
+}
+
 if (!function_exists('extract_string')) {
 
     function extract_string(string $string, string $indice = '/', int $start_index = 0)
@@ -70,8 +172,6 @@ if (!function_exists('extract_string')) {
 if (!function_exists('autoload_folder')) {
     function autoload_folder(string $folderName, ?string $NewNamespace = null)
     {
-
-        dd($folderName);
         // Add the folder to the autoload configuration (optional)
         $composerJsonPath = base_path('composer.json');
         $composerJson = json_decode(file_get_contents($composerJsonPath), true);
@@ -136,7 +236,6 @@ if (!function_exists('convert_to_kebab_case')) {
     {
         // Replace spaces with hyphens and convert to lowercase
         return str_replace('_', '-', convert_to_snake_case($string));
-        return preg_replace('/[^a-z0-9\-]/', '', $string); // Remove non-alphanumeric characters
     
     }
 }
@@ -236,11 +335,19 @@ if (!function_exists('tableSchema')) {
      * @param string $table
      * @param string $connection
      * @param array  $excludeColumns
-     * @return array
+     * @return array|null
      */
-    function tableSchema(string $table, string $connection, array $excludeColumns = []): array
+    function tableSchema(string $table, string|null $connection = 'pgsql', array $excludeColumns = []): array|null
     {
-        $excludeColumns = array_merge($excludeColumns, ['id', 'slug', 'created_by', 'created_at', 'updated_at']);
+
+        if(!$connection) $connection = 'pgsql';
+        
+        if(!Schema::hasTable($table)){
+            exit("Table doesn't exists. Please migrate the table $table.\n");
+            return null;
+        }
+        
+        $excludeColumns = array_merge($excludeColumns, ['id', 'created_by', 'created_at', 'updated_at']);
         $schema = \Illuminate\Support\Facades\Schema::connection($connection)->getConnection()->getDoctrineSchemaManager();
         $columns = $schema->listTableColumns($table);
 
@@ -292,5 +399,217 @@ if (!function_exists('convertToSnakeCase')) {
     {
         $modifiedString = preg_replace('/(?<!^)([A-Z])/', '_$1', $string);
         return strtolower($modifiedString);
+    }
+}
+
+if(!function_exists('appendCodeToFunction')){
+    function appendCodeToFunction($fileContent, $function, $existingContent, $additionalCode) {
+
+        $functionDeclaration = (explode('void', $function)[0]. "void \n\t");
+
+
+        // Check if the additional code is already present in the existing content
+        if (strpos($existingContent, $additionalCode) === false) {
+            // Append the new code to the existing content
+            $modifiedContent = $existingContent . "\n" . $additionalCode;
+
+            // Replace the existing content in the file
+            $fileContent = str_replace($function, $functionDeclaration . "{\n" . $modifiedContent . "\n\n\t}\n", $fileContent);
+        }
+        
+        /* // Use a regular expression to find the function declaration
+        $pattern = "/(function\s+" . preg_quote($functionName, '/') . "\s*\([^)]*\))[^{]*{([^}]*)}/s";
+        ///$pattern = "/(function\s+" . preg_quote($functionName, '/') . "\s*\([^)]*\))\s*{((?:[^{}]+|(?R))*)}/s";
+
+        if (preg_match($pattern, $fileContent, $matches)) {
+            
+            $functionDeclaration = $matches[1];
+            ///$existingContent = ($matches[2]);
+
+            $functionDeclaration = $functionDeclaration. ": void \n\t";
+
+            // Append the new code to the existing content
+            $modifiedContent = $existingContent . "\n" . $additionalCode;
+
+            // Replace the existing content in the file
+            $fileContent = str_replace($matches[0], $functionDeclaration . "{" . $modifiedContent . "\n\t}", $fileContent);
+        } */
+        
+        return $fileContent;
+    }
+}
+
+if(!function_exists('getFunctionContent')){
+    /* function getFunctionContent($fileContent, $functionName) {
+        // Use a regular expression to find the function declaration
+        $pattern = "/(function\s+" . preg_quote($functionName, '/') . "\s*\([^)]*\))[^{]*{([^}]*)}/s";
+        if (preg_match($pattern, $fileContent, $matches)) {
+            return $matches[2];
+        }
+        return null; // Function not found
+    } */
+
+
+    function getFunction($class, $functionName) {
+        $reflectionClass = new ReflectionClass($class);
+
+        if ($reflectionClass->hasMethod($functionName)) {
+            $method = $reflectionClass->getMethod($functionName);
+            $startLine = $method->getStartLine();
+            $endLine = $method->getEndLine();
+            $sourceCode = file($reflectionClass->getFileName());
+            ///$content = implode('', array_slice($sourceCode, $startLine - 1, $endLine - $startLine + 1));
+            ///$content = implode('', array_slice($sourceCode, $startLine, $endLine - $startLine));
+            $content = implode('', array_slice($sourceCode, $startLine - 1, $endLine - $startLine + 1));
+
+            return $content;
+        }
+
+        return null;
+    }
+
+}
+
+
+
+/**
+ * Unset all items from an array except for the specified keys.
+ *
+ * @param array $array The input array.
+ * @param array $keys The keys to keep in the array.
+ * @return void
+ */
+function unset_all_except(array &$array, array $keys): void
+{
+
+    foreach ($array as $key => $value) {
+        if (!in_array($key, $keys)) {
+            unset($array[$key]);
+        }
+    }
+}
+
+function getPaginationFormat()
+{
+    return [
+        'current_page',
+        'data',
+        'first_page_url',
+        'from',
+        'last_page',
+        'last_page_url',
+        'links' => [
+            [
+                'url',
+                'label',
+                'active',
+            ],
+            [
+                'url',
+                'label',
+                'active',
+            ],
+            [
+                'url',
+                'label',
+                'active',
+            ],
+        ],
+        'next_page_url',
+        'path',
+        'per_page',
+        'prev_page_url',
+        'to',
+        'total'
+    ];
+}
+function getFunctionContentFromFile($filePath, $functionName, $all = false) {
+    if (file_exists($filePath)) {
+        $sourceCode = file($filePath);
+        $functionDeclaration = "function $functionName";
+
+        $functionStartLine = null;
+        $functionEndLine = null;
+
+        // Find the start and end lines of the function
+        for ($i = 0; $i < count($sourceCode); $i++) {
+            if (strpos($sourceCode[$i], $functionDeclaration) !== false) {
+                $functionStartLine = $i;
+                break;
+            }
+        }
+
+        if ($functionStartLine !== null) {
+            // Find the closing curly bracket of the function
+            $bracketCount = 0;
+            for ($i = $functionStartLine + 1; $i < count($sourceCode); $i++) {
+                
+                $line = trim($sourceCode[$i]);
+
+                if (strpos($line, '{') !== false) {
+                    $bracketCount++;
+
+                    if ($bracketCount === 1) {
+                        $functionStartLine = $i;
+                    }
+                }  elseif (strpos($line, '}') !== false) {
+                    $bracketCount--;
+                    if ($bracketCount === 0) {
+                        $functionEndLine = $i;
+                        break;
+                    }
+                }
+            }
+
+            if ($functionEndLine !== null) {
+                // Exclude the function declaration and the closing curly bracket
+                ///$content = implode('', array_slice($sourceCode, $functionStartLine - 1, $functionEndLine - $functionStartLine + 2 ));
+                $content = implode('', array_slice($sourceCode, $functionStartLine + 1, $functionEndLine - $functionStartLine - 1));
+                $functionContent = implode('', array_slice($sourceCode, $functionStartLine - 1, $functionEndLine - $functionStartLine + 2));
+
+                return !$all ? $content : $functionContent;
+            }
+        }
+    }
+
+    return null;
+}
+
+if(!function_exists('pascalToSnake')){
+    function pascalToSnake($input)
+    {
+        // Use preg_replace to convert to snake_case
+        return strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $input));
+    }
+}
+
+
+if(!function_exists('convert_to_snake_case')){
+    /**
+     *
+     * @param string $string
+     * @return string
+     */
+    function convert_to_snake_case(string $string): string {
+        $modifiedString = preg_replace('/(?<!^)([A-Z])/', '_$1', $string);
+        return strtolower($modifiedString);
+    }
+}
+
+if(!function_exists('convert_file_path_to_namespace')){
+    function convert_file_path_to_namespace($classFilePath)
+    {
+        $shortPath = short_path($classFilePath);
+        
+        // Remove '.php' extension
+        $withoutExtension = str_replace('.php', '', $shortPath);
+
+        // Replace directory separators with namespace separators
+        $withNamespace = str_replace('/', '\\', $withoutExtension);
+
+        // Capitalize the first letter of the resulting string
+        $finalNamespace = ucfirst($withNamespace);
+
+        return $finalNamespace;
     }
 }

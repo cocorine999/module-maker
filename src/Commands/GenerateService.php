@@ -180,8 +180,6 @@ class GenerateService extends Command
         if($this->option('dto'))
         {
 
-            $migrate = $this->ask("Do you want to migrate this table (y/n) ", 'y');
-            
             $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
 
 

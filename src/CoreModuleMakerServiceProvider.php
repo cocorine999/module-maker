@@ -64,7 +64,7 @@ class CoreModuleMakerServiceProvider extends PackageServiceProvider
                         $installCommand->info('Thank you very much for installing this package!');
                     });
            });
-        require_once(__DIR__. "/Helpers/Mixins/Helpers.php");
+        //require_once(__DIR__. "/Helpers/Mixins/Helpers.php");
 
 		$this->app->register(CoreServiceProvider::class);
         $this->publishes([
