@@ -16,7 +16,7 @@ class GenerateCreateDTO extends Command
      */
     protected $signature = 'generate:create-dto 
                                 {name : The name of the DTO class}
-                                {modelName : The name the associate model dto}
+                                {--model= : The name the associate model dto}
                                 {--modules : The base path to the dto class}
                                 {--base_path : The base path to the dto class}
                                 {--path= : The path to the dto class}
@@ -38,7 +38,9 @@ class GenerateCreateDTO extends Command
     public function handle()
     {
         $name      = $this->argument('name');
-        $modelName = Str::studly(convertToSnakeCase($this->argument('modelName')));
+
+        $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
+
         $force     = $this->option('force');
         $createDtoName   = Str::studly(convertToSnakeCase($name));
         $base_path = $this->option('base_path');
@@ -65,7 +67,11 @@ class GenerateCreateDTO extends Command
         }
 
         $model = new ("App\\Models\\{$modelName}")();
-        $attributes = tableSchema($model->getTable(), $model->getConnectionName());
+
+        if(is_null($attributes = tableSchema($model->getTable(), $model->getConnectionName()))){
+            $this->error('Table doesn\'t exists. Please migrate the table.');
+            return;
+        }
 
         // Create the create dto class file
         $filesystem = new Filesystem();
@@ -79,8 +85,15 @@ class GenerateCreateDTO extends Command
             return;
         }
 
+        // Define the base directory of the package
+        $base_path = dirname(__DIR__, 2);
+
+        // Build the create dto class full path to the file.
+        $stub_path = "{$base_path}/stubs/dtos/create.stub";
+
         // Create the create dto class
-        $classStub = file_get_contents(base_path()."/./../stubs/dtos/create.stub");
+        ///$classStub = file_get_contents(base_path()."/./../stubs/dtos/create.stub");
+        $classStub = file_get_contents($stub_path);
         $classStub = str_replace(['{{CreateDtoName}}', '{{modelName}}', '{{namespace}}', '{{rules}}', '{{messages}}'], [$createDtoName, $modelName, $namespace, $this->generateRules($attributes), "[]"], $classStub);
         $filesystem->put($createDTOClassFilePath, $classStub);
 

@@ -18,7 +18,7 @@ class GenerateRepository extends Command
      */
     protected $signature = 'generate:repository 
                                 {name : The name of the repository}
-                                {modelName : The name of the associate model repository}
+                                {--model= : The name of the associate model repository}
                                 {--modules : The base path to the repository class}
                                 {--base_path : The base path to the repository class}
                                 {--path= : The path to the repository class}
@@ -40,7 +40,9 @@ class GenerateRepository extends Command
     public function handle()
     {
         $name = $this->argument('name');
-        $modelName = $this->argument('modelName');
+
+        $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
+
         $force = $this->option('force');
         $repositoryName = Str::studly(convertToSnakeCase($name));
         $base_path = $this->option('base_path');
@@ -73,8 +75,14 @@ class GenerateRepository extends Command
             return;
         }
 
+        // Define the base directory of the package
+        $base_folder = dirname(__DIR__, 2);
+
+        // Build the read-write repository class full path to the file.
+        $stub_path = "{$base_folder}/stubs/repositories/write.stub";
+
         // Create the read-write repository class
-        $stub_path = "./../stubs/repositories/write.stub";
+        //$stub_path = "./../stubs/repositories/write.stub";
         
         $classStub = file_get_contents($stub_path);
         $classStub = str_replace(['{{moduleName}}', '{{modelName}}', '{{namespace}}'], [$repositoryName, $modelName, $namespace], $classStub);
@@ -100,8 +108,14 @@ class GenerateRepository extends Command
             return;
         }
 
+        // Define the base directory of the package
+        $base_folder = dirname(__DIR__, 2);
+
+        // Build the read-only repository class full path to the file.
+        $stub_path = "{$base_folder}/stubs/repositories/read_only.stub";
+
         // Create the read-only repository class
-        $stub_path = "./../stubs/repositories/read_only.stub";
+        //$stub_path = "./../stubs/repositories/read_only.stub";
         
         $classStub = file_get_contents($stub_path);
         $classStub = str_replace(['{{moduleName}}', '{{modelName}}', '{{namespace}}'], [$repositoryName, $modelName, $namespace], $classStub);

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 
+use function Laravel\Prompts\error;
 
 if (!function_exists('core_path')) {
 
@@ -333,10 +335,17 @@ if (!function_exists('tableSchema')) {
      * @param string $table
      * @param string $connection
      * @param array  $excludeColumns
-     * @return array
+     * @return array|null
      */
-    function tableSchema(string $table, string $connection, array $excludeColumns = []): array
+    function tableSchema(string $table, string $connection, array $excludeColumns = []): array|null
     {
+
+        
+        if(!Schema::hasTable($table)){
+            exit("Table doesn't exists. Please migrate the table $table.\n");
+            return null;
+        }
+        
         $excludeColumns = array_merge($excludeColumns, ['id', 'created_by', 'created_at', 'updated_at']);
         $schema = \Illuminate\Support\Facades\Schema::connection($connection)->getConnection()->getDoctrineSchemaManager();
         $columns = $schema->listTableColumns($table);

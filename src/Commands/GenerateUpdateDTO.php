@@ -16,7 +16,7 @@ class GenerateUpdateDTO extends Command
      */
     protected $signature = 'generate:update-dto 
                                 {name : The name of the DTO class}
-                                {modelName : The name the associate model dto}
+                                {--model= : The name the associate model dto}
                                 {--modules : The base path to the dto class}
                                 {--base_path : The base path to the dto class}
                                 {--path= : The path to the dto class}
@@ -38,7 +38,9 @@ class GenerateUpdateDTO extends Command
     public function handle()
     {
         $name          = $this->argument('name');
-        $modelName     = Str::studly(convertToSnakeCase($this->argument('modelName')));
+
+        $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
+
         $force         = $this->option('force');
         $upateDtoName  = Str::studly(convertToSnakeCase($name));
         $base_path     = $this->option('base_path');
@@ -65,8 +67,12 @@ class GenerateUpdateDTO extends Command
         }
 
         $table = new ("App\\Models\\{$modelName}")();
-        $attributes = tableSchema($table->getTable(), $table->getConnectionName());
-
+        
+        if(is_null($attributes = tableSchema($table->getTable(), $table->getConnectionName()))){
+            $this->error('Table doesn\'t exists. Please migrate the table.');
+            return;
+        }
+        
         // Create the update dto class file
         $filesystem = new Filesystem();
         $updateDTOClassFilePath = "{$path}/{$upateDtoName}.php";
@@ -79,8 +85,14 @@ class GenerateUpdateDTO extends Command
             return;
         }
 
+        // Define the base directory of the package
+        $base_folder = dirname(__DIR__, 2);
+
+        // Build the update dto class full path to the file.
+        $stub_path = "{$base_folder}/stubs/dtos/update.stub";
+
         // Create the update dto class
-        $classStub = file_get_contents(base_path()."/./../stubs/dtos/update.stub");
+        $classStub = file_get_contents($stub_path);
         $classStub = str_replace(['{{UpdateDtoName}}', '{{modelName}}', '{{namespace}}', '{{rules}}', '{{messages}}'], [$upateDtoName, $modelName, $namespace, $this->generateRules($attributes), "[]"], $classStub);
         $filesystem->put($updateDTOClassFilePath, $classStub);
         

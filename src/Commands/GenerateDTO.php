@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LaravelCoreModule\CoreModuleMaker\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 
 class GenerateDTO extends Command
@@ -18,7 +17,7 @@ class GenerateDTO extends Command
      */
     protected $signature = 'generate:dto 
                                     {name : The name of the DTO class}
-                                    {modelName : The name the associate model dto}
+                                    {--model= : The name the associate model dto}
                                     {--modules : The base path to the dto class}
                                     {--base_path : The base path to the dto class}
                                     {--path= : The path to the dto class}
@@ -41,7 +40,10 @@ class GenerateDTO extends Command
     public function handle()
     {
         $name      = $this->argument('name');
-        $modelName = Str::studly(convertToSnakeCase($this->argument('modelName')));
+
+        $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
+
+        ///$modelName = Str::studly(convertToSnakeCase($this->argument('modelName')));
         $dtoName   = Str::studly(convertToSnakeCase($name));
         $base_path = $this->option('base_path');
         $path      = $this->option('path');
@@ -65,12 +67,12 @@ class GenerateDTO extends Command
         $namespace = str_replace('/', '\\', $namespace);
 
         $params = [
-            'modelName' => $modelName,
-            '--namespace' => $namespace,
-            '--path'      => short_path($path, 'base'), 
-            '--path_type' => short_path($path, $this->option('base_path') ? 'base' : 'app'), 
-            '--api-version'     => $this->option('api-version'),
-            '--force'     => $this->option('force'),
+            '--model'       => $name,
+            '--namespace'   => $namespace,
+            '--path'        => short_path($path, $this->option('base_path') ? 'base' : 'app'), 
+            '--path_type'   => short_path($path, $this->option('base_path') ? 'base' : 'app'), 
+            '--api-version' => $this->option('api-version'),
+            '--force'       => $this->option('force'),
         ];
 
         $createDTO = "Create{$dtoName}DTO";

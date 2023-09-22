@@ -158,8 +158,15 @@ class GenerateController extends Command
 
     protected function generateControllerContent($controllerName, $namespace = "App\Http\Controllers\APIs\RESTful\\v1", $resourceName = 'User', $requestNamespace = "App\Http\Requests")
     {
+
+        // Define the base directory of the package
+        $base_path = dirname(__DIR__, 2);
+
+        // Build the full path to the file.
+        $path = "{$base_path}/stubs/controller.stub";
+
         $resourceNamespace = "Modules\\" . $resourceName . "s\Services";
-        $controllerStub = file_get_contents("./../stubs/controller.stub");
+        $controllerStub = file_get_contents($path);
 
         return str_replace(['{{resourceController}}', '{{namespace}}', '{{module}}', '{{resourceNamespace}}', '{{resourceName}}', '{{requestNamespace}}'], [$controllerName, $namespace, strtolower($resourceName), $resourceNamespace, $resourceName, $requestNamespace], $controllerStub);
     }

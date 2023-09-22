@@ -52,7 +52,14 @@ class GenerateUpdateRequest extends Command
         $dto = Str::studly(convertToSnakeCase($this->option('dto') ?? $this->ask("Enter the dto where the update request class should be placed (default: Update{$model}DTO)", "Update{$model}DTO")));
         $dtoNamespace = $this->option('dtoNamespace') ?? $this->ask("Enter the data transfert object namespace where the update dto class should be placed (default: Modules\\{$model}s\\DataTransfertObjects)", "Modules\\{$model}s\\DataTransfertObjects");
     
-        $update_stub = file_get_contents("./../stubs/requests/update.stub");
+
+        // Define the base directory of the package
+        $base_folder = dirname(__DIR__, 2);
+
+        // Build the update requests class full path to the file.
+        $stub_path = "{$base_folder}/stubs/requests/update.stub";
+
+        $update_stub = file_get_contents($stub_path);
 
         $filename = base_path("$directory/$name.php");
 
@@ -83,7 +90,7 @@ class GenerateUpdateRequest extends Command
 
             // Build the arguments and options for the "generate:update-dto" command
             $arguments = ['name' => $dto];
-            $arguments['modelName'] = $model;
+            $options['--model'] = $model;
             $options['--namespace'] = $dtoNamespace;
             if($firstString !== 'App'){
                 $options['--base_path'] = true;

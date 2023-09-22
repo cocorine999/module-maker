@@ -47,7 +47,7 @@ class GenerateMigration extends Command
         $path = $this->option('path');
         $stub = $this->option('stub');
 
-        $columns = $this->option('columns');
+        $columns = $this->option('columns') ?? '{}';
 
         // Convert the JSON string to an associative array
         $columns = json_decode($columns, true);
@@ -72,10 +72,16 @@ class GenerateMigration extends Command
             return;
         }
 
-        $path = "./../stubs/migration.stub";
+        // Define the base directory of the package
+        $base_path = dirname(__DIR__, 2);
+
+        // Build the full path to the file.
+        $stub_path = "{$base_path}/stubs/migration.stub";
+
+        ///$stub_path = "./../stubs/migration.stub";
 
         // Generate the migration file
-        $stubContent = $stub ? file_get_contents($stub) : file_get_contents($path);
+        $stubContent = $stub ? file_get_contents($stub) : file_get_contents($stub_path);
 
         $stubContent = str_replace('{{className}}', $migrationClassName, $stubContent);
         $stubContent = str_replace('{{table_name}}', ($createTable ?? $table), $stubContent);
@@ -90,17 +96,33 @@ class GenerateMigration extends Command
             $this->error("Failed to create migration: {$migrationFileName}");
         }
 
-        if($this->option('model')){
+        if($this->option('model'))
+        {
 
-            // Build the arguments and options for the "make:new-model" command
+            $migrate = $this->ask("Do you want to migrate this table (y/n) ", 'y');
+            
+            if($migrate === 'n') return;
+
+            // Execute the "migrate" command using the call method
+            $this->call('migrate', [
+                '--path' => short_path($migrationFilePath)
+            ]);
+
+            //dd(tableSchema(($createTable ?? $table), $connection));
+
+            // Build the arguments and options for the "generate:model" command
             $arguments = ['name' => $this->option('model')];
             $options['--table'] = $createTable ?? $table;
             if($this->option('force'))
                 $options['--force'] = $this->option('force');
 
-            // Execute the "make:model" command using the call method
-            $this->call('make:new-model', array_merge($arguments, $options));
+            // Execute the "generate:model" command using the call method
+            $this->call('generate:model', array_merge($arguments, $options));
         }
+    }
+
+    protected function preview(): void{
+
     }
 
     /**

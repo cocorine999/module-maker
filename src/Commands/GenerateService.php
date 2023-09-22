@@ -17,12 +17,14 @@ class GenerateService extends Command
      * @var string
      */
     protected $signature = 'generate:service 
-                                        {name : The name of the service}
-                                        {--base_path : The base path to the repository class}
-                                        {--path= : The path to the repository class}
-                                        {--namespace= : The namespace of the repository class}
-                                        {--modules : The base path to the repository class}
-                                        {--force : Force create the service}';
+                                    {name : The name of the service}
+                                    {--base_path : The base path to the repository class}
+                                    {--path= : The path to the repository class}
+                                    {--namespace= : The namespace of the repository class}
+                                    {--modules : The base path to the repository class}
+                                    {--model= : The name of the associate model service}
+                                    {--dto= : The associate dto to the service}
+                                    {--force : Force create the service}';
 
 
     /**
@@ -81,13 +83,26 @@ class GenerateService extends Command
             return;
         }
 
+
+        // Define the base directory of the package
+        $base_folder = dirname(__DIR__, 2);
+
+
         // Create the read-write service class
-        $classStub = file_get_contents(base_path()."/./../stubs/services/restful/write.stub");
+
+        // Build the read-write service class full path to the file.
+        $stub_path = "{$base_folder}/stubs/services/restful/write.stub";
+
+        $classStub = file_get_contents($stub_path);
         $classStub = str_replace(['{{moduleName}}', '{{namespace}}'], [$serviceName, $namespace], $classStub);
         $filesystem->put($classFilePath, $classStub);
 
         // Create the read-write service interface
-        $interfaceStub = file_get_contents(base_path()."/./../stubs/services/restful/contracts/write_contract.stub");
+
+        // Build the read-write service interface full path to the file.
+        $stub_path = "{$base_folder}/stubs/services/restful/contracts/write_contract.stub";
+
+        $interfaceStub = file_get_contents($stub_path);
         $interfaceStub = str_replace(['{{moduleName}}', '{{namespace}}'], [$serviceName, $namespace], $interfaceStub);
         $filesystem->put($interfaceFilePath, $interfaceStub);
 
@@ -127,12 +142,20 @@ class GenerateService extends Command
         }
 
         // Create the query service class
-        $classStub = file_get_contents(base_path()."/./../stubs/services/restful/query.stub");
+
+        // Build the query service class full path to the file.
+        $stub_path = "{$base_folder}/stubs/services/restful/query.stub";
+
+        $classStub = file_get_contents($stub_path);
         $classStub = str_replace(['{{moduleName}}', '{{namespace}}'], [$serviceName, $namespace], $classStub);
         $filesystem->put($classFilePath, $classStub);
 
         // Create the query service interface
-        $interfaceStub = file_get_contents(base_path()."/./../stubs/services/restful/contracts/query_contract.stub");
+
+        // Build the query service interface full path to the file.
+        $stub_path = "{$base_folder}/stubs/services/restful/contracts/query_contract.stub";
+
+        $interfaceStub = file_get_contents($stub_path);
         $interfaceStub = str_replace(['{{moduleName}}', '{{namespace}}'], [$serviceName, $namespace], $interfaceStub);
         $filesystem->put($interfaceFilePath, $interfaceStub);
 
@@ -152,6 +175,29 @@ class GenerateService extends Command
         file_put_contents($providerPath, $fileContent); 
         
         if($base_path) autoload_folder(extract_string(short_path($path)));
+
+
+        if($this->option('dto'))
+        {
+
+            $migrate = $this->ask("Do you want to migrate this table (y/n) ", 'y');
+            
+            $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
+
+
+            // Build the arguments and options for the "generate:model" command
+            $arguments = ['name' => $modelName];
+            $options['--model'] = $modelName;
+            if($this->option('force'))
+                $options['--force'] = $this->option('force');
+            if($this->option('modules'))
+                $options['--modules'] = $this->option('modules');
+            if($this->option('base_path'))
+                $options['--base_path'] = $this->option('base_path');
+
+            // Execute the "generate:model" command using the call method
+            $this->call('generate:dto', array_merge($arguments, $options));
+        }
 
         unset($filesystem);
         unset($fileContent);

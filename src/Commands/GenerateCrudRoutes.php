@@ -80,7 +80,14 @@ class GenerateCrudRoutes extends Command
 
         $resourceName = $this->argument('name');
         ///$controllerStub = file_get_contents("./../stubs/controller.stub");
-        $templatePath = "./../stubs/routes/resource-routes.stub";///base_path('core/Stubs/Routes/resource-routes.stub'); // Replace with your actual template path
+
+        // Define the base directory of the package
+        $base_path = dirname(__DIR__, 2);
+
+        // Build the full path to the file.
+        $templatePath = "{$base_path}/stubs/routes/resource-routes.stub";
+
+        ///$templatePath = "./../stubs/routes/resource-routes.stub";///base_path('core/Stubs/Routes/resource-routes.stub'); // Replace with your actual template path
         
         $version = str_replace(['v', 'V'], [''], $this->option('versionning'));
 

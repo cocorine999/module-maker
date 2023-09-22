@@ -16,7 +16,7 @@ class RegisterDynamicProvider extends Command
      * @var string
      */
     protected $signature = 'generate:dynamic-provider {name}
-                                                    {--force : Force create the repository}';
+                                                      {--force : Force create the repository}';
 
     /**
      * The console command description.

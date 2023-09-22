@@ -6,6 +6,7 @@ namespace LaravelCoreModule\CoreModuleMaker\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class GenerateModel extends Command
@@ -24,7 +25,7 @@ class GenerateModel extends Command
                                 {--force : Force create the model}
                                 {--pivot : The Model is a pivot}
                                 {--repository= : The associate repository to the model}
-                                {--repositoryNamespace=App\Repositories : The Model is a pivot}
+                                {--repository-namespace=App\Repositories : The Model is a pivot}
                                 {--fillable= : The fillable attributes separated by commas}';
 
     
@@ -63,10 +64,10 @@ class GenerateModel extends Command
         $base_path = dirname(__DIR__, 2);
 
         // Build the full path to the file.
-        $path = "{$base_path}/stubs/model.stub";
+        $stub_path = "{$base_path}/stubs/model.stub";
         
         // Generate the model file
-        $modelStub = file_get_contents($path);
+        $modelStub = file_get_contents($stub_path);
 
         $info = new ('LaravelCoreModule\CoreModuleMaker\Eloquents\Contract\ModelContract');
 
@@ -74,9 +75,16 @@ class GenerateModel extends Command
 
         $exclude = array_keys(array_merge(array_merge(array_flip($info->default_fillable), array_flip($info->default_visible)), array_flip($info->default_guarded)));
 
-        $attributes = tableSchema($table, $connection);
+        if(is_null($attributes = tableSchema($table, $connection))){
+            exit("Table doesn't exists. Please migrate the table $table.");
+            $this->error("Table doesn't exists. Please migrate the table $table.");
+            return null;
+        }
 
-        $fillableAttributesWithCast = $this->getTableSchema($table, $connection, $exclude);
+        if(is_null($fillableAttributesWithCast = $this->getTableSchema($table, $connection, $exclude))){
+            $this->error('Table doesn\'t exists. Please migrate the table.');
+            return;
+        }
 
         $fillableAttributes = array_map(function ($attr) {
             return explode(':', $attr)[0];
@@ -110,18 +118,22 @@ class GenerateModel extends Command
 
         if($this->option('repository'))
         {
-            $repositoryName =  Str::studly(convertToSnakeCase($this->option('repository')));
-            $repositoryNamespace =  $this->option('repositoryNamespace');
-            
+
+            $repositoryName = $this->option('repository'); // ?? $repositoryName = $this->ask("Enter the model name CamelCase (User) ", "User");
+    
+            $repositoryName =  Str::studly(convertToSnakeCase($repositoryName));
+
+            $repositoryNamespace = $this->option('repository-namespace');
+    
             $firstString = explode('\\', $repositoryNamespace)[0];
 
             $file_path = str_replace([$firstString, "\\"], [strtolower(convertToSnakeCase($firstString)), '/'], "{$repositoryNamespace}\\{$repositoryName}.php");
 
             if (!File::exists($file_path)){
 
-                // Build the arguments and options for the "generate:create-dto" command
+                // Build the arguments and options for the "generate:repository" command
                 $arguments = ['name' => $repositoryName];
-                $arguments['modelName'] = $name;
+                $options['--model'] = $name;
                 $options['--namespace'] = $repositoryNamespace;
                 if($firstString !== 'App'){
                     $options['--base_path'] = true;
@@ -180,12 +192,15 @@ class GenerateModel extends Command
      * @param string $table
      * @param string $connection
      * @param array  $excludeColumns
-     * @return array
+     * @return array|null
      */
-    protected function getTableSchema(string $table, string $connection, array $excludeColumns = []): array
+    protected function getTableSchema(string $table, string $connection, array $excludeColumns = []): array|null
     {
 
-        $attributes = tableSchema($table, $connection );
+        if(is_null($attributes = tableSchema($table, $connection))){
+            $this->error('Table doesn\'t exists. Please migrate the table.');
+            return null;
+        }
 
         return array_filter(array_map(function($attribute, $key) use ($excludeColumns) {
             if(!in_array($key, $excludeColumns, true))
@@ -207,28 +222,35 @@ class GenerateModel extends Command
         return implode(",\n        ", $dates);
     }
 
-    public function getDefaultAttributesWithValues(array $attributes, array $excludes = []){
+    public function getDefaultAttributesWithValues(array $attributes, array $excludes = [])
+    {
 
-        $maxStringLength = max(array_filter(array_map(function ($string) use ($excludes, $attributes){
+        $extract_attributes = array_filter(array_map(function ($string) use ($excludes, $attributes){
             if(!in_array($string, $excludes, true) && !$attributes[$string]['default']){
                 return strlen($string);
             }
             return null;
-        }, array_keys($attributes))));
+        }, array_keys($attributes)));
 
-        $defaultAttributesWithValues = array_filter(array_map(function($attribute, $key) use ($maxStringLength) {
+        if(!empty($extract_attributes)) $maxStringLength = max($extract_attributes);
+        else $maxStringLength = 0;
 
-            if($attribute['default'])
+        $defaultAttributesWithValues = array_filter(array_map(function($attribute, $key) use ($excludes, $maxStringLength) {
+
+            if(!in_array($key, $excludes, true))
             {
-                $space = '';
+                if($attribute['default'])
+                {
+                    $space = '';
 
-                for ($i=($maxStringLength - strlen($key)); $i > 0; --$i) {
-                    $space .= ' ';
+                    for ($i=($maxStringLength - strlen($key)); $i > 0; --$i) {
+                        $space .= ' ';
+                    }
+
+                    $value = $attribute['type'] === 'integer' ? $attribute['default'] : ($attribute['type'] === 'boolean' ? ($attribute['default'] ? 'TRUE' : 'FALSE') : "'{$attribute['default']}'");
+                    
+                    return "'{$key}' $space => $value";
                 }
-
-                $value = $attribute['type'] === 'integer' ? $attribute['default'] : ($attribute['type'] === 'boolean' ? ($attribute['default'] ? 'TRUE' : 'FALSE') : "'{$attribute['default']}'");
-                
-                return "'{$key}' $space => $value";
             }
         }, $attributes, array_keys($attributes)));
         

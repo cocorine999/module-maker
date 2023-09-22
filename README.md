@@ -49,6 +49,34 @@ Optionally, you can publish the views using
 php artisan vendor:publish --tag="core-modules-maker-views"
 ```
 
+## Basic Usage
+
+### Migration Modules
+
+You can use the following Artisan command to generate a new enum class:
+
+```php
+php artisan generate:migration UserType
+```
+
+Now, you just need to add the possible values your enum can have as constants.
+
+```php
+<?php declare(strict_types=1);
+
+namespace App\Enums;
+
+use BenSampo\Enum\Enum;
+
+final class UserType extends Enum
+{
+    const Administrator = 0;
+    const Moderator = 1;
+    const Subscriber = 2;
+    const SuperAdministrator = 3;
+}
+```
+
 ## Usage
 
 ```php

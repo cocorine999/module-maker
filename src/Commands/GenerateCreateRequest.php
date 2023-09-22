@@ -51,7 +51,13 @@ class GenerateCreateRequest extends Command
         $dto = Str::studly(convertToSnakeCase($this->option('dto') ?? $this->ask("Enter the dto where the create dto class should be placed (default: Create{$model}DTO)", "Create{$model}DTO")));
         $dtoNamespace = $this->option('dtoNamespace') ?? $this->ask("Enter the data transfert object namespace where the create dto class should be placed (default: Modules\\{$model}s\\DataTransfertObjects)", "Modules\\{$model}s\\DataTransfertObjects");
     
-        $create_stub = file_get_contents("./../stubs/requests/create.stub");
+        // Define the base directory of the package
+        $base_path = dirname(__DIR__, 2);
+
+        // Build the full path to the file.
+        $stub_path = "{$base_path}/stubs/requests/create.stub";
+
+        $create_stub = file_get_contents($stub_path);
 
         $filename = base_path("$directory/$name.php");
 
@@ -82,7 +88,7 @@ class GenerateCreateRequest extends Command
 
             // Build the arguments and options for the "generate:create-dto" command
             $arguments = ['name' => $dto];
-            $arguments['modelName'] = $model;
+            $options['--model'] = $model;
             $options['--namespace'] = $dtoNamespace;
             if($firstString !== 'App'){
                 $options['--base_path'] = true;
