@@ -107,9 +107,7 @@ class GenerateMigration extends Command
             $this->call('migrate', [
                 '--path' => short_path($migrationFilePath)
             ]);
-
-            //dd(tableSchema(($createTable ?? $table), $connection));
-
+            
             // Build the arguments and options for the "generate:model" command
             $arguments = ['name' => $this->option('model')];
             $options['--table'] = $createTable ?? $table;
