@@ -75,19 +75,6 @@ composer require laravel-core-modules/core-modules-maker:version
 
 ## Configuration
 
-You can install the package via composer:
-
-```bash
-composer require laravel-core-modules/core-modules-maker:version
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="core-modules-maker-migrations"
-php artisan migrate
-```
-
 You can publish the config file with:
 
 ```bash
@@ -479,27 +466,7 @@ php artisan generate:migration CreateUsersTable --create=users --force
 Use the **`--force`** option with caution, as it will overwrite any existing migration file with the same name. This can be useful when you need to regenerate a migration file with updated specifications for a table or when resolving conflicts during development.
 
 
-
-```bash
-php artisan generate:migration {name} --columns='{}' --create={table}
-```
-
-- `{name}`: The name of the migration file (e.g., `CreateUsersTable`).
-- `--columns`: 
-- `--create`: 
-- `{table}`: The name of the migration file (e.g., `CreateUsersTable`).
-- `[options]`: 
-    - `--model`: 
-    - `--force`: 
-
-
-##### Example:
-
-You can use the following Artisan command to generate a new migration class:
-
-```bash
-php artisan generate:migration CreateUsersTable --columns='{"reference": {"type": "string", "nullable": false, "default": null}}' --create=users
-```
+### Documentation
 
 Now, you just need to add the possible values your enum can have as constants.
 
@@ -598,15 +565,6 @@ class CreateUserTable extends Migration
     }
 
 }
-```
-
-### Documentation
-
-### Usage
-
-```php
-$coreModuleMaker = new LaravelCoreModule\CoreModuleMaker();
-echo $coreModuleMaker->echoPhrase('Hello, LaravelCoreModule!');
 ```
 
 ## Testing
