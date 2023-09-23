@@ -112,24 +112,54 @@ trait TableMigrationTrait
      * @return void
      * @throws \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException  If the table does not exist or if any of the specified columns do not exist.
      */
-    protected function dropColumns(string $table_name, array $column_names): void
+    protected function dropColumns(string $table_name, \Closure $column_removal_definition, array $column_names = []): void
     {
         if (!Schema::hasTable($table_name)) {
             throw new \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException("Cannot drop columns from '$table_name' as the table does not exist.");
         }
 
-        Schema::table($table_name, function (\Illuminate\Database\Schema\Blueprint $table) use ($table_name, $column_names) {
-            foreach ($column_names as $column_name) {
-                if (!$table->hasColumn($column_name)) {
-                    throw new \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException("Cannot drop column '$column_name' from '$table_name' as it does not exist.");
+        Schema::table($table_name, function (\Illuminate\Database\Schema\Blueprint $table) use ($column_removal_definition) {
+            $column_removal_definition($table); // Call the provided closure to specify which columns to remove.
+        });
+
+        if(!empty($column_names))
+        {
+            Schema::table($table_name, function (\Illuminate\Database\Schema\Blueprint $table) use ($table_name, $column_names) {
+                foreach ($column_names as $column_name) {
+                    if (!$table->hasColumn($column_name)) {
+                        throw new \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException("Cannot drop column '$column_name' from '$table_name' as it does not exist.");
+                    }
                 }
-            }
 
-            // Remove foreign constraints from the specified columns.
-            $this->removeForeignConstraints($table_name, $column_names);
+                // Remove foreign constraints from the specified columns.
+                $this->removeForeignConstraints($table_name, $column_names);
 
-            // Now, drop the specified columns.
-            $table->dropColumns($column_names); // Drop the specified columns.
+                // Now, drop the specified columns.
+                $table->dropColumns($column_names); // Drop the specified columns.
+            });
+        }
+    }
+
+    /**
+     * Alter an existing table by adding, modifying, setting constraints, or deleting columns.
+     *
+     * This method is used to alter an existing table in the database by adding new columns,
+     * modifying the table schema, setting constraints, or deleting columns.
+     *
+     * @param string $table_name The name of the table to alter.
+     * @param \Closure $alteration_definition The closure defining the alterations to the table.
+     * @return void
+     * @throws \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException If the table does not exist.
+     */
+    protected function alterTable(string $table_name, \Closure $alteration_definition, $conditions): void
+    {
+        if (!Schema::hasTable($table_name)) {
+            throw new \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException("Cannot alter '$table_name' table as it does not exist.");
+        }
+
+        Schema::table($table_name, function (\Illuminate\Database\Schema\Blueprint $table) use ($alteration_definition) {
+            // Call the provided closure to define alterations to the table.
+            $alteration_definition($table);
         });
     }
 
