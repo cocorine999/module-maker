@@ -673,7 +673,7 @@ You can customize the repository's base path, path, and namespace using the `--m
 #### Forcing Repository Creation
 If you want to force the creation of the repository even if it already exists, you can use the `--force` flag.
 
-### Example
+#### Example
 Let's say you want to create a repository named `ProductRepository` associated with the `Product` model, and you want it to be in the `App\\Repositories\\Products` namespace. You can run the following command:
 
 ```bash
@@ -681,7 +681,7 @@ php artisan generate:repository ProductRepository --model=Product --namespace=Ap
 ```
 This will generate the `ProductRepository` class in the specified namespace, associated with the `Product` model.
 
-#### Conclusion
+### Conclusion
 The `generate:repository` command simplifies the creation of repository classes in your Laravel project, allowing you to maintain a clean and organized separation of concerns between your application's logic and data access.
 
 ## Testing
