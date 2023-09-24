@@ -19,12 +19,12 @@ class GenerateModel extends Command
      */
     protected $signature = 'generate:model
                                 {name : The name of the model}
-                                {--table= : The associated table of the model}
+                                {--table=users : The associated table of the model}
                                 {--connection=pgsql : The connection name to the associated table of the model}
                                 {--namespace=Core : ModelContract namespace}
                                 {--force : Force create the model}
                                 {--pivot : The Model is a pivot}
-                                {--repository= : The associate repository to the model}
+                                {--repository : The associate repository to the model}
                                 {--repository-namespace=App\Repositories : The Model is a pivot}
                                 {--fillable= : The fillable attributes separated by commas}';
 
@@ -123,7 +123,7 @@ class GenerateModel extends Command
         if($this->option('repository'))
         {
 
-            $repositoryName = $this->option('repository'); // ?? $repositoryName = $this->ask("Enter the model name CamelCase (User) ", "User");
+            $repositoryName = $this->ask("Enter the model name CamelCase ($name) ", "$name");
     
             $repositoryName =  Str::studly(convertToSnakeCase($repositoryName));
 
@@ -148,7 +148,6 @@ class GenerateModel extends Command
                 }
 
                 $options['--path'] = str_replace($firstString . "\\", "", "{$repositoryNamespace}");
-                // $options['--api-version'] = $this->option("api-version");
                 
                 if($this->option('force'))
                     $options['--force'] = $this->option('force');
