@@ -179,7 +179,7 @@ class GenerateService extends Command
         if($base_path) autoload_folder(extract_string(short_path($path)));
 
 
-        if($this->option('dto'))
+        if(!empty($this->option('dto')))
         {
 
             $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
