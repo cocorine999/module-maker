@@ -40,11 +40,11 @@ class GenerateRepository extends Command
     public function handle()
     {
         $name = $this->argument('name');
+        $repositoryName = Str::studly(convertToSnakeCase($name));
 
-        $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
+        $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase ($repositoryName) ", "$repositoryName");
 
         $force = $this->option('force');
-        $repositoryName = Str::studly(convertToSnakeCase($name));
         $base_path = $this->option('base_path');
         $path = $this->option('path');
         $namespace = $this->option('namespace');

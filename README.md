@@ -664,25 +664,185 @@ Replace `{name}` with the desired name of your repository.
 
 #### Associating a Model
 You can associate a model with the repository using the `--model` option. This is useful when you have a specific model that the repository will interact with.
+```bash
+php artisan generate:repository {name} --model={model_name}
+```
+Replace `{model_name}` with the name of the associated model.
+
+##### Example
+Let's say you want to create a repository named `ProductRepository` associated with the `Product` model. You can run the following command:
+
+```bash
+php artisan generate:repository ProductRepository --model=Product
+```
+This will generate the `ProductRepository` class in the specified namespace, associated with the `Product` model.
 
 
-#### Customizing Paths and Namespace
-You can customize the repository's base path, path, and namespace using the `--modules`, `--base_path`, `--path`, and `--namespace` options.
+#### Customizing Namespace
+You have the flexibility to customize the namespace of the generated repository using the `--namespace` option. This allows you to place the repository in a specific namespace that aligns with your project's structure.
+
+To customize the namespace, simply add the `--namespace` option followed by the desired namespace when running the `generate:repository` command. Here's an example:
 
 
-#### Forcing Repository Creation
-If you want to force the creation of the repository even if it already exists, you can use the `--force` flag.
-
-#### Example
+##### Example
 Let's say you want to create a repository named `ProductRepository` associated with the `Product` model, and you want it to be in the `App\\Repositories\\Products` namespace. You can run the following command:
 
 ```bash
 php artisan generate:repository ProductRepository --model=Product --namespace=App\\Repositories\\Products
 ```
+In the example above, the repository will be generated in the `App\Repositories\Products` namespace, associated with the `Product` model.
+
+Customizing the namespace provides you with better organization and ensures that your repository is placed in the appropriate directory within your Laravel project.
+
+#### Customizing Paths
+
+In addition to customizing the namespace, you also have the flexibility to customize the repository's base path and path using various options:
+
+- `--base_path`: Specifies the base path to the repository class.
+- `--modules`: Specifies the base path to the repository class.
+- `--path`: Specifies the path to the repository class.
+
+Here's how you can use these options when running the `generate:repository` command:
+
+
+```bash
+php artisan generate:repository {name} --base_path={base_path} --path={path} --modules
+```
+- Replace `{name}` with the desired name of your repository.
+- `{base_path}`: Specify the base path where you want to place the repository class.
+- `{path}`: Set the path to the repository class.
+- `--modules`: Use this flag to indicate that the repository class should be located within the `Modules` directory.
+
+Customizing these paths allows you to control where the generated repository class is placed within your Laravel project's directory structure.
+
+To customize the paths, include the relevant options when running the `generate:repository` command. Here are examples:
+
+##### Customizing the Base Path
+
+```bash
+php artisan generate:repository {name} --base_path --modules
+```
+In this example, the repository will be generated within the `Modules` directory as the base path.
+
+##### Customizing the Path
+
+```bash
+php artisan generate:repository {name} --base_path --modules --path=Custom
+```
+In this case, the repository will be generated within the `Custom` directory as the path.
+
+
+##### Example
+Let's say you want to create a repository named `ProductRepository` associated with the `Product` model, and you want it to be in at root of the laravel projet folder in the modules folder of a specific path. You can run the following command:
+
+```bash
+php artisan generate:repository ProductRepository --model=Product --base_path --modules path=Products\Repositories
+```
 This will generate the `ProductRepository` class in the specified namespace, associated with the `Product` model.
+
+##### Note
+Customizing the paths provides you with fine-grained control over the location of your repository class, allowing you to maintain a clean and organized project structure that suits your project's needs.
+
+#### Forcing Repository Creation
+If you want to force the creation of the repository even if it already exists, you can use the `--force` flag.
+
+#### Example
+
+```bash
+php artisan generate:repository ProductRepository --force
+```
 
 ### Conclusion
 The `generate:repository` command simplifies the creation of repository classes in your Laravel project, allowing you to maintain a clean and organized separation of concerns between your application's logic and data access.
+Use this command to streamline your repository creation process and enhance the maintainability of your Laravel applications.
+
+
+
+## Service Management
+
+### Command Overview
+The `generate:service` command is a powerful tool for generating service classes in your Laravel project. Services help encapsulate your application's business logic and maintain separation of concerns, making your codebase more organized and maintainable.
+
+### Command Signature
+
+```bash
+php artisan generate:service 
+    {name : The name of the service}
+    {--base_path : The base path to the service class}
+    {--path= : The path to the service class}
+    {--namespace= : The namespace of the service class}
+    {--modules : The base path folder of the service class}
+    {--model= : The name of the associated model service}
+    {--dto : The associated DTO (Data Transfer Object) for the service}
+    {--force : Force create the service}
+```
+
+### Command Options
+- **`{name}`**: The name of the service you want to generate.
+- **`--model`**: (Optional) The name of the associated model for the service.
+- **`--modules`**: (Optional) The base path to the service class within the "Modules" directory.
+- **`--base_path`**: (Optional) The base path to the service class.
+- **`--path`**: (Optional) The path to the service class.
+- **`--dto`**: (Optional) The name of the associated Data Transfer Object (DTO) for the service.
+- **`--namespace`**: (Optional) The namespace of the service class.
+- **`--force`**: (Optional) Use this flag to force the creation of the service, even if it already exists.
+
+### Command Usage
+
+#### Basic Usage
+
+To generate a service, run the following command:
+
+```bash
+php artisan generate:service {name}
+```
+Replace `{name}` with the desired name of your service.
+
+#### Associating a Model and DTO
+You can associate a model and a Data Transfer Object (DTO) with the service using the `--model` and `--dto` options, respectively. This is useful when your service interacts with specific model entities and requires a DTO to handle data transfer.
+
+To associate a model with the service, use the `--model` option followed by the model's name:
+
+```bash
+php artisan generate:service {name} --model={model_name}
+```
+
+To associate a DTO with the service, you can simply use the --dto option without specifying a name. This will make the DTO option optional:
+
+```bash
+php artisan generate:service {name} --dto[=dto_name]
+```
+
+#### Note
+By associating a model and DTO with your service, you can streamline data handling and improve the organization of your Laravel application.
+
+#### Example
+For example, to generate a ProductRESTfulReadWriteService associated with the Product model and using CreateProductDTO and UpdateProductDTO for data transfer, you can run the following command:
+```bash
+php artisan generate:service Product --model=Product --dto
+```
+
+This command will generate the `ProductRESTfulReadWriteService` and `ProductRESTfulQueryService` classes associated with the `Product` model and utilizing the `CreateProductDTO` and `UpdateProductDTO` for data transfer.
+
+
+
+#### Forcing Service Creation
+If you want to force the creation of the service even if it already exists, you can use the `--force` flag.
+
+
+#### Example
+
+```bash
+php artisan generate:repository ProductRepository --force
+```
+
+
+### Conclusion
+
+The `generate:service` command simplifies the creation of service classes in your Laravel project, allowing you to maintain a clean and organized separation of concerns and encapsulate your application's business logic effectively.
+
+Use this command to streamline your service creation process and enhance the maintainability of your Laravel applications.
+
 
 ## Testing
 

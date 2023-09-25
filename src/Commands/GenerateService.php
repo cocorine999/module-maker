@@ -23,7 +23,7 @@ class GenerateService extends Command
                                     {--namespace= : The namespace of the repository class}
                                     {--modules : The base path to the repository class}
                                     {--model= : The name of the associate model service}
-                                    {--dto= : The associate dto to the service}
+                                    {--dto=true : The associate dto to the service}
                                     {--force : Force create the service}';
 
 
@@ -47,6 +47,8 @@ class GenerateService extends Command
         $path = $this->option('path');
         $namespace = $this->option('namespace');
         $modules = $this->option('modules');
+
+        dd(($this->option('dto')));
 
         $inter_path = null;
         if(!$path){ 
