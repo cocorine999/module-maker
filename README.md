@@ -917,7 +917,7 @@ php artisan generate:dto {name} [options]
 - **`{name}`**: The name of your desired DTO class. This command will create a new DTO file with this name.
 - **`[options]`**: Optional. Additional options or flags to customize the DTO generation process.
 
-### Command Signature
+#### Command Signature
 
 ```bash
 php artisan generate:service 
