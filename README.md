@@ -850,7 +850,7 @@ php artisan generate:service UserService --dto=UserDTO
 This command will generate the `UserService` class and establish its association with the `UserDTO` for handling data transfer within the service. If you don't specify a DTO name, the `--dto` option becomes optional, allowing you to decide later if you want to associate a DTO with your service.
 
 
-#### Note
+#### Conclusion
 By associating a model and DTO with your service, you can streamline data handling and improve the organization of your Laravel application.
 
 #### Example
