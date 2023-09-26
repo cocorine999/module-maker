@@ -146,8 +146,7 @@ php artisan generate:migration CreatePostsTable --create=posts
 ```
 This will generate a migration file for creating the "posts" table in your database.
 
-##### **Note**
-The {table} value should be specified by you to define the name of the table you intend to create.
+***Note:*** The {table} value should be specified by you to define the name of the table you intend to create.
 
 
 ##### **Specify Columns**
@@ -267,7 +266,7 @@ This example demonstrates how to structure the command to create a migration fil
 In Laravel, you can easily modify your application's database schema by creating migrations. This section outlines how to use the `php artisan generate:migration` command to generate a migration file designed for altering the schema of existing columns within an existing database table.
 
 
-#### Usage
+##### Usage
 
 To create a migration file for this purpose, you can use the following command format:
 
@@ -297,7 +296,7 @@ This example demonstrates how to structure the command to create a migration fil
 
 In Laravel, managing and adapting your application's database schema is a fundamental aspect of development. This section outlines how to leverage the `php artisan generate:migration` command to create a migration file tailored for removing existing columns from an established database table.
 
-#### Usage
+##### Usage
 
 To create a migration file for this purpose, you can utilize the following command format:
 
@@ -327,7 +326,7 @@ This example illustrates how to structure the command to create a migration file
 In Laravel, the ability to adapt and refine your application's database schema is crucial. This section outlines how to utilize the `php artisan generate:migration` command to create a migration file tailored for the purpose of modifying an existing database table.
 
 
-#### Usage
+##### Usage
 To create a migration file for this purpose, you can employ the following command format:
 
 ```bash
@@ -351,12 +350,9 @@ php artisan generate:migration ModifyProductTable --action=modify --table=produc
 ```
 This example demonstrates how to structure the command to create a migration file tailored for modifying the specified elements within your existing "products" table.
 
-##### **Note**
-By using the **`--action`** option appropriately for your migration needs, you can generate migration files tailored to your specific database schema changes, whether it's **`adding`** or **`modifying`** or **`deleting`** columns.
+***Note:*** By using the **`--action`** option appropriately for your migration needs, you can generate migration files tailored to your specific database schema changes, whether it's **`adding`** or **`modifying`** or **`deleting`** columns.
 
 The **`--action`** option provides clarity and customization when working with migration files that involve various database schema changes.
-
-
 
 ##### **Specify Database Connection**
 
@@ -438,8 +434,7 @@ By using the **`--path`** option, you can organize your migration files in a way
 
 The **`--path`** option is valuable when you need to keep your migration files separate from the default **`database/migrations`** directory, making it easier to manage migrations in larger projects.
 
-##### **Note**
-Keep in mind that you should provide the relative path from the root of your Laravel project when using the --path option.
+***Note:*** Keep in mind that you should provide the relative path from the root of your Laravel project when using the `--path` option.
 
 ##### **Force Migration File Execution**
 
@@ -460,8 +455,8 @@ Suppose you've made changes to your migration files and need to re-run them to u
 ```bash
 php artisan generate:migration CreateUsersTable --create=users --force
 ```
-##### **Note**
-Use the **`--force`** option with caution, as it will overwrite any existing migration file with the same name. This can be useful when you need to regenerate a migration file with updated specifications for a table or when resolving conflicts during development.
+
+***Note:*** Use the **`--force`** option with caution, as it will overwrite any existing migration file with the same name. This can be useful when you need to regenerate a migration file with updated specifications for a table or when resolving conflicts during development.
 
 
 ### Model Management
@@ -530,8 +525,7 @@ php artisan generate:model UserProduct --table=user_products --pivot
 ```
 This command will create a `UserProduct` model file, allowing you to work with the pivot table in your Laravel application.
 
-##### **Note**
-The **`--pivot`** option streamlines pivot model creation, making it easier to manage complex many-to-many relationships in your Laravel application. Simplify your code, enhance organization, and build with confidence.
+***Note:*** The **`--pivot`** option streamlines pivot model creation, making it easier to manage complex many-to-many relationships in your Laravel application. Simplify your code, enhance organization, and build with confidence.
 
 
 ##### **Specify Fillable Attributes**
@@ -556,8 +550,8 @@ php artisan generate:model Product --table=products --fillable=name,description,
 ```
 This command will generate a "Product" model associated with the "products" table and set the specified attributes as fillable.
 
-##### **Note**
-By using the **`--fillable`** option with the **`php artisan generate:model`** command, you can efficiently customize your model's fillable attributes and tailor them to your Laravel application's needs.
+
+***Note:*** By using the **`--fillable`** option with the **`php artisan generate:model`** command, you can efficiently customize your model's fillable attributes and tailor them to your Laravel application's needs.
 
 
 ##### **Create a repository**
@@ -582,8 +576,8 @@ php artisan generate:model Product --table=products --repository --repository-na
 ```
 This command will generate both a `Product` model associated with the `products` table and a `ProductRepository` class in the `App\Repositories\Product` namespace in your Laravel project. You can then use the repository to encapsulate database operations related to the `Product` model.
 
-##### **Note**
-By using the **`--repository`** and **`--repository-namespace`** options along with the **`php artisan generate:model`** command, you can enhance the maintainability and organization of your Laravel application, especially when dealing with complex data operations.
+
+***Note:*** By using the **`--repository`** and **`--repository-namespace`** options along with the **`php artisan generate:model`** command, you can enhance the maintainability and organization of your Laravel application, especially when dealing with complex data operations.
 
 
 ##### **Specify a Custom Connection**
@@ -613,13 +607,13 @@ php artisan generate:model New --create=news --connection=mongodb
 ```
 This command will generate a **`New`** model associated with the **`news`** table and ensure that it uses the "pgsql" database connection in your Laravel application.
 
-##### **Note**
-By using the **`--connection`** option with the php artisan generate:model command, you can customize the database connection for your model, especially when working with multiple database connections in your application.
+
+***Note:*** By using the **`--connection`** option with the php artisan generate:model command, you can customize the database connection for your model, especially when working with multiple database connections in your application.
 
 
-#### **Note**
+##### ***Note***
 
-The php artisan generate:model command empowers you to streamline model creation in your Laravel projects. With options for generating **`repositories`**, **`pivot`** models, specifying **`fillable`** attributes, and **`custom database connections`**, you have the tools to design and organize your application's data layer effectively. Whether you're building a simple application or a sophisticated system, using these model management options will contribute to the maintainability and scalability of your Laravel project.
+The `php artisan generate:model` command empowers you to streamline model creation in your Laravel projects. With options for generating **`repositories`**, **`pivot`** models, specifying **`fillable`** attributes, and **`custom database connections`**, you have the tools to design and organize your application's data layer effectively. Whether you're building a simple application or a sophisticated system, using these model management options will contribute to the maintainability and scalability of your Laravel project.
 
 
 ## Repository Management
@@ -740,8 +734,8 @@ php artisan generate:repository ProductRepository --model=Product --base_path --
 ```
 This will generate the `ProductRepository` class in the specified namespace, associated with the `Product` model.
 
-##### Note
-Customizing the paths provides you with fine-grained control over the location of your repository class, allowing you to maintain a clean and organized project structure that suits your project's needs.
+
+***Note:*** Customizing the paths provides you with fine-grained control over the location of your repository class, allowing you to maintain a clean and organized project structure that suits your project's needs.
 
 #### Forcing Repository Creation
 If you want to force the creation of the repository even if it already exists, you can use the `--force` flag.
@@ -824,10 +818,11 @@ Let's say you want to create a ProductService associated with the Product model.
 ```bash
 php artisan generate:service ProductService --model=Product
 ```
-##### Note
-This command will generate the ProductService class and establish its association with the Product model, making it convenient to perform operations on product data within the service.
+
+***Note:*** This command will generate the ProductService class and establish its association with the Product model, making it convenient to perform operations on product data within the service.
 
 
+##### ***Note***
 To associate a DTO with the service, you can simply use the --dto option without specifying a name. This will make the DTO option optional:
 
 ```bash
@@ -846,11 +841,9 @@ Let's say you want to create a `UserService` associated with a DTO named `UserDT
 ```bash
 php artisan generate:service UserService --dto=UserDTO
 ```
-##### Note
-This command will generate the `UserService` class and establish its association with the `UserDTO` for handling data transfer within the service. If you don't specify a DTO name, the `--dto` option becomes optional, allowing you to decide later if you want to associate a DTO with your service.
 
+***Note:*** This command will generate the `UserService` class and establish its association with the `UserDTO` for handling data transfer within the service. If you don't specify a DTO name, the `--dto` option becomes optional, allowing you to decide later if you want to associate a DTO with your service.
 
-#### Conclusion
 By associating a model and DTO with your service, you can streamline data handling and improve the organization of your Laravel application.
 
 #### Example
@@ -897,12 +890,12 @@ php artisan generate:repository {name} [--force]
 php artisan generate:repository ProductRepository --force
 ```
 
-
 ### Conclusion
 
 The `generate:service` command simplifies the creation of service classes in your Laravel project, allowing you to maintain a clean and organized separation of concerns and encapsulate your application's business logic effectively.
 
 Use this command to streamline your service creation process and enhance the maintainability of your Laravel applications.
+
 
 ### DTO (Data Transfer Object) Management
 #### Command Overview
@@ -996,8 +989,6 @@ php artisan generate:dto {name} [--namespace={namespace_value}]
 - **`--namespace`**: This option is optional but provides you with the ability to define a custom namespace for the DTO.
 - **`{namespace_value}`**: This parameter is also optional and allows you to specify the desired namespace you intend to assign to your DTO class.
 
-- **`--api-version={namespace_value}`**: By using this option, you can precisely set the namespace for your DTO class, aiding in the efficient organization of your Laravel application's codebase.
-
 This feature empowers you to structure and manage your DTOs in a way that aligns with your application's architecture and code organization preferences.
 
 ###### Example
@@ -1008,8 +999,8 @@ php artisan generate:dto ProductDTO --namespace=App\\DTOs
 ```
 This command will generate the `UserDTO` class with the specified namespace, ensuring that it's organized in the `App\DTOs` namespace within your Laravel application.
 
-###### Note
-By using the `--namespace` option with the `php artisan generate:dto` command, you can tailor the namespace of your DTO class to suit your Laravel application's structure and organization. This allows you to keep your codebase neat and well-structured.
+
+***Note:*** By using the `--namespace` option with the `php artisan generate:dto` command, you can tailor the namespace of your DTO class to suit your Laravel application's structure and organization. This allows you to keep your codebase neat and well-structured.
 
 ##### Specify API Version
 If your DTOs are related to a specific API version, you can specify it using the `--api-version` option:
@@ -1030,8 +1021,8 @@ php artisan generate:dto ProductDTO --api-version=v2
 ```
 This command will create a ProductDTO class linked to API version 2.0, allowing you to maintain different DTOs for various API versions in your Laravel application.
 
-###### Note
-By using the `--api-version` option with the `php artisan generate:dto` command, you can efficiently categorize and manage DTOs based on different API versions in your Laravel application. This organization helps ensure that your data transfer objects align with the specific requirements and changes of each API version, enhancing the maintainability and scalability of your application's data handling.
+
+***Note:*** By using the `--api-version` option with the `php artisan generate:dto` command, you can efficiently categorize and manage DTOs based on different API versions in your Laravel application. This organization helps ensure that your data transfer objects align with the specific requirements and changes of each API version, enhancing the maintainability and scalability of your application's data handling.
 
 
 ##### Force DTO Creation
@@ -1051,13 +1042,651 @@ php artisan generate:dto UserDTO --force
 ```
 By employing the --force option with the php artisan generate:dto command, you can efficiently create and manage DTOs in your Laravel application. This can be particularly helpful when you need to ensure that the DTO remains in sync with your data structure, even if you've made changes to it.
 
-###### Note
 
-Using the `--force` option enhances your ability to create and organize DTOs in your Laravel application. It ensures that your data transfer processes remain streamlined and structured, adapting to any changes in your application's data model.
+***Note:*** Using the `--force` option enhances your ability to create and organize DTOs in your Laravel application. It ensures that your data transfer processes remain streamlined and structured, adapting to any changes in your application's data model.
 
 
 #### Conclusion
 DTOs are an integral part of managing data transfer in modern Laravel applications. By using the `php artisan generate:dto` command with various options, you can easily create and customize DTO classes to suit your specific application requirements.
+
+
+## Create DTO (Data Transfer Object) Management
+
+### Command Overview
+In Laravel, managing DTOs is crucial for structuring data transfers within your application. The `php artisan generate:create-dto` command simplifies the process of creating new DTOs specifically designed for creating resources.
+You can use the following Artisan command to generate a new create DTO class file:
+
+```bash
+php artisan generate:create-dto {name} [options]
+```
+- **`{name}`**: The name of the dto you want to generate.
+- **`[options]`**: Optional. Additional options or flags to customize the create DTO generation process.
+
+#### Command Signature
+
+```bash
+php artisan generate:create-dto 
+                    {name : The name of the DTO class}
+                    {--model= : The name the associate model dto}
+                    {--modules : The base path to the dto class}
+                    {--base_path : The base path to the dto class}
+                    {--path= : The path to the dto class}
+                    {--namespace= : The namespace of the dto class}
+                    {--api-version=v1 : Specify the API version for the dto}
+                    {--force : Force create the dto}';
+```
+
+#### Command Options
+- **`{name}`**: The name of the create-dto you want to generate.
+- **`--model=`**: Optional. The name of the associated model for the DTO.
+- **`--modules`**: Optional. If you want to package the DTO class within a "modules" folder, you can use this option. It allows you to organize your DTOs within a specific directory named "modules."
+- **`--base_path`**: Optional. This option allows you to specify the base path for the DTO class. If you want the DTO class to be located at the root of the Laravel project, you can use this option.
+- **`--path=`**: Optional. This option allows you to specify a custom path for the DTO class within your Laravel project. You can use it to define the location of the DTO class.
+- **`--namespace=`**: Optional. The namespace of the DTO class.
+- **`--api-version=`**: Optional. Specify the API version for the DTO.
+- **`--force`**: Optional. Force create the DTO, overwriting existing files with the same name.
+
+#### Command Usage
+
+##### Basic Usage
+To generate a create DTO, run the following command:
+
+```bash
+php artisan generate:create-dto {name}
+```
+Replace `{name}` with the desired name of your create DTO.
+
+##### Additionnal Options
+In addition to the basic usage, the `php artisan generate:create-dto` command provides several additional options for more customization:
+
+- [**`--model={model_name}`**](#specify-the-associated-model-of-the-create-dto): Specifies the name of the associated model for the DTO. This option helps you define the relationship between the DTO and the model.
+
+- [**`--base_path`**](#customizing-base-path-for-create-dto): Specifies the base path to the DTO class. You can use this option to define the root directory for your DTOs.
+
+- [**`--modules`**](#organizing-create-dto-within-modules): Sets the base path folder for the DTO class. Use this option if you want to organize your DTOs within a specific directory.
+
+- [**`--path={path}`**](#custom-path-for-create-dto): Sets the path to the DTO class. Use this option to specify the location of the DTO class within your project.
+
+- [**`--namespace[={namespace}]`**](#customizing-create-dto-namespace): Defines the namespace of the DTO class. You can use this option to place your DTOs within a specific namespace.
+
+- [**`--api-version[={version}]`**](#specify-create-dto-api-version): Specifies the API version for the DTO. Use this option if your DTOs are related to a specific API version.
+
+- [**`--force`**](#force-create-dto-creation): If you want to forcefully generate a DTO file, even if a DTO file with the same name already exists, you can use the --force option.
+
+
+These additional options allow you to tailor the DTO generation process to your specific project requirements, providing flexibility and organization in managing your DTOs.
+
+
+##### Specify the Associated Model
+You can specify an associated model for your create DTO using the `--model` option. This is useful when your create DTO is closely tied to a particular model's data structure:
+
+```bash
+php artisan generate:create-dto {name} [--model={model_name}]
+```
+- **`{name}`**: The name of the create-dto you want to generate.
+- **`--model=`**: Optional. The name of the associated model for the DTO.
+- **`{model_name}`**: Optional. The name of the associated model for the DTO.
+- **`--model={model_name}`**: Specify the name of the associated model. This option helps you define the relationship between the create DTO and the model.
+
+###### Example
+Let's say you want to create a create DTO for handling user data transfers during resource creation in your application associated with the `User` model. You can use the following command:
+
+```bash
+php artisan generate:create-dto UserCreateDTO --model=User
+```
+This command will generate a new `UserCreateDTO` class in your Laravel project, which you can use for structuring and managing user-related data transfers during resource creation.
+
+##### Force Creation
+If you want to forcefully generate a create DTO file, even if a create DTO file with the same name already exists, you can use the `--force` option:
+This is useful when your create DTO is closely tied to a particular model's data structure:
+
+```bash
+php artisan generate:create-dto {name} [--force]
+```
+- **`{name}`**: The name of your desired create DTO class. This command will create a new DTO file with this name.
+- **`--force`**: Optional. This option allows you to create the create DTO file forcefully, overwriting any existing file with the same name.
+
+###### Example
+Let's say you want to create a create DTO for handling user data transfers during resource creation in your application associated with the `User` model. You can use the following command to force the creation, even if a `UserCreateDTO` file already exists:
+
+
+```bash
+php artisan generate:create-dto UserCreateDTO --force
+```
+This command will generate a new `UserCreateDTO` class in your Laravel project, which you can use for structuring and managing user-related data transfers during resource creation.
+
+
+***Note:*** The `--force` option is a valuable tool when you need to generate a create DTO file without being hindered by existing files with the same name. It enables you to overwrite any pre-existing create DTO file and ensure that your Laravel project maintains the desired structure and organization.
+
+
+##### Specify API Version
+
+If your create DTOs are related to a specific API version, you can specify it using the `--api-version` option:
+
+```bash
+php artisan generate:create-dto {name} [--api-version[={version}]]
+```
+- **`{name}`**: The name of your desired create DTO class. This command will create a new DTO file with this name.
+- **`--api-version`**: Optional. This option allows you to specify the desired API version for the create DTO.
+- **`{version}`**: Optional. The version number you want to associate with the create DTO.
+- **`--api-version[={version}]`**: Use this option to specify the API version for the create DTO. It helps categorize and manage create DTOs based on different API versions.
+
+###### Example
+Let's say you have an API with version `v2`, and you want to create a create DTO named `ProductCreateDTO` for that version. You can use the following command:
+
+```bash
+php artisan generate:create-dto ProductCreateDTO --api-version=v2
+```
+This command will generate a `ProductCreateDTO` class associated with API version `v2` in your Laravel project.
+
+***Note:*** Utilizing the --api-version option when generating create DTOs can be particularly useful for organizing and managing your DTOs based on different API versions within your Laravel application. This allows for efficient data transfer and structuring processes tailored to specific API requirements.
+
+##### Customizing Namespace
+You can customize the namespace for your create DTO class using the `--namespace` option:
+
+```bash
+php artisan generate:create-dto {name} [--namespace[={namespace_value}]]
+```
+- **`{name}`**: The name of your desired create DTO class. This command will create a new DTO file with this name.
+- **`--namespace`**: Optional. This option allows you to specify the desired namespace for the create DTO.
+- **`{namespace_value}`**: Optional. The custom namespace you want to associate with the create DTO class.
+- **`--namespace[={namespace_value}]`**: Use this option to set the desired namespace for the create DTO class. It enables you to efficiently organize your create DTOs within your Laravel application.
+
+###### Example
+To illustrate how to use the `--namespace` option when generating a create DTO, let's assume you want to create a create DTO named `UserCreateDTO` and place it within the `App\DTOs` namespace. You can accomplish this by running the following command:
+
+
+```bash
+php artisan generate:create-dto UserCreateDTO --namespace=App\\DTOs
+```
+This command will generate the `UserCreateDTO` class with the specified namespace, ensuring that it's organized in the `App\DTOs` namespace within your Laravel application.
+
+***Note:*** These command descriptions and examples provide you with a comprehensive understanding of how to use the `php artisan generate:create-dto` command to efficiently manage Data Transfer Objects (DTOs) in your Laravel application. Utilize the various options and examples to tailor DTO generation according to your specific project requirements, enhancing data transfer and structuring processes.
+
+
+#### Customizing DTO Directory Structure
+
+When generating Data Transfer Objects (DTOs) with the `php artisan generate:create-dto` command, you have the flexibility to customize the directory structure in which the DTOs are generated. You can combine the following options to create a directory structure that suits your project's organization:
+
+- **`--base_path`**: Use this option if you want to generate the DTO within the base path of your Laravel project. It sets the root directory for your DTOs.
+
+- **`--modules`**: If your project follows a modular structure and you want to package the DTO within a "modules" folder, use this option.
+
+- **`--path`**: This option allows you to define a custom path where the create DTO class should be generated within your Laravel project. You can specify a path relative to your project's root directory.
+
+Here's how you can use these options to create a custom directory structure for your create DTOs:
+
+```bash
+php artisan generate:create-dto {name} [--base_path] [--modules] [--path[={path}]]
+```
+- **`{name}`**: The name of your desired create DTO class. This command will create a new DTO file with this name.
+- **`--base_path`**: Optional. Use this option to generate the create DTO class at the root of your Laravel project. When included, the create DTO will be placed at the root of your project, allowing for organization outside the app folder.
+- **`--modules`**: Optional. This option allows you to generate the create DTO class within a `modules` folder in your Laravel project.
+- **`--path`**: Optional. Use this option to define a custom path where the create DTO class should be generated within your Laravel project.
+- **`{path}`**: Optional. Specify the custom path where the create DTO should be created.
+- **`--path[={path}]`**: Use this option to set a custom path for creating the create DTO. It allows you to specify the location of the DTO class within your project based on your project's structure.
+
+
+##### Custom Path for DTO
+To specify a custom path for DTO generation, you can use the `--path` option:
+
+```bash
+php artisan generate:create-dto {name} [--path[={path}]]
+```
+- **`{name}`**: The name of your desired create DTO class. This command will create a new DTO file with this name.
+- **`--path`**: Optional. Use this option to define a custom path where the create DTO class should be generated within your Laravel project.
+- **`{path}`**: Optional. Specify the custom path where the create DTO should be created.
+- **`--path[={path}]`**: Use this option to set a custom path for creating the create DTO. It allows you to specify the location of the DTO class within your project based on your project's structure.
+
+###### Example
+To create a create DTO within a custom path, such as `app/DTOs`, you can use the following command:
+
+
+```bash
+php artisan generate:create-dto OrderCreateDTO --path=app/DTOs
+```
+This command will generate the OrderCreateDTO class in the specified custom path, allowing you to organize your DTOs according to your project's structure.
+
+***Note:*** The `--path` option provides flexibility in determining the location where your create DTOs are generated, allowing you to adhere to your project's organization conventions.
+
+
+##### Customizing Base Path
+You can customize the base path for your create DTO class using the `--base_path` option:
+
+```bash
+php artisan generate:create-dto {name} [--base_path]
+```
+- **`{name}`**: The name of your desired create DTO class. This command will create a new DTO file with this name.
+- **`--base_path`**: Optional. Use this option to generate the create DTO class at the root of your Laravel project. When included, the create DTO will be placed at the root of your project, allowing for organization outside the app folder.
+
+###### Example
+To generate a create DTO class at the root of your Laravel project, you can use the following command:
+
+```bash
+php artisan generate:create-dto UserCreateDTO --base_path
+```
+This command will create the UserCreateDTO class at the root of your Laravel project.
+
+
+##### Organizing within Modules
+You can customize the base path for your create DTO class using the `--modules` option:
+
+```bash
+php artisan generate:create-dto {name} [--modules]
+```
+- **`{name}`**: The name of your desired create DTO class. This command will create a new DTO file with this name.
+- **`--modules`**: Optional. This option allows you to generate the create DTO class within a `modules` folder in your Laravel project.
+
+###### Example
+To generate a create DTO within a `modules` folder at the root of your Laravel project, you can use the following command:
+
+```bash
+php artisan generate:create-dto ProductCreateDTO --modules
+```
+This command will create the `ProductCreateDTO` class within a `modules` folder.
+
+
+##### Extra
+
+You can combine these options to create a custom directory structure tailored to your project's needs. Here are some examples:
+
+- To place create DTOs within a `modules` folder at the base path:
+
+```bash
+php artisan generate:create-dto {name} [--base_path] [--modules]
+```
+
+***Example:***
+```bash
+php artisan generate:create-dto UserCreateDTO --base_path  --modules
+```
+
+- To generate create DTOs within a custom folder at the base path:
+
+```bash
+php artisan generate:create-dto {name} [--base_path] [--path[={path}]]
+```
+
+***Example:***
+```bash
+php artisan generate:create-dto UserCreateDTO --base_path --path=Custom/Folders
+```
+
+- To organize create DTOs within a `modules` folder at the base path and specify a custom path:
+
+```bash
+php artisan generate:create-dto {name} [--base_path] [--modules] [--path[={path}]]
+```
+This combination offers flexibility in structuring your create DTOs to meet your project's specific requirements.
+
+***Example:***
+```bash
+php artisan generate:create-dto UserCreateDTO --base_path  --modules --path=Custom/Folders
+```
+This example generates a `UserCreateDTO` class with a directory structure that includes a `modules` folder and a custom path named`Custom/Folders`
+
+***Note:*** By combining these options, you can tailor the organization of your create DTOs to align with your project's specific requirements. Whether you prefer to keep them within the base path, package them in a `modules` folder, or specify a custom path, these options provide you with the flexibility needed for efficient DTO management within your Laravel application.
+
+
+***Note:*** These command descriptions and examples provide you with a comprehensive understanding of how to use the `php artisan generate:create-dto` command to efficiently manage Data Transfer Objects (DTOs) in your Laravel application. Utilize the various options and examples to tailor DTO generation according to your specific project requirements, enhancing data transfer and structuring processes.
+
+### Conclusion
+Managing DTOs is essential for organizing data transfers in your Laravel application. The `php artisan generate:create-dto` command simplifies the process, allowing you to create custom DTOs tailored to your project's needs. By using the provided options, you can efficiently structure and manage your DTOs, enhancing data transfer and structuring processes.
+
+
+## Update DTO (Data Transfer Object) Management
+
+### Command Overview
+In Laravel, managing DTOs is crucial for structuring data transfers within your application. The `php artisan generate:update-dto` command simplifies the process of creating new DTOs specifically designed for creating resources.
+You can use the following Artisan command to generate a new update DTO class file:
+
+```bash
+php artisan generate:update-dto {name} [options]
+```
+- **`{name}`**: The name of the dto you want to generate.
+- **`[options]`**: Optional. Additional options or flags to customize the update DTO generation process.
+
+#### Command Signature
+
+```bash
+php artisan generate:update-dto 
+                    {name : The name of the DTO class}
+                    {--model= : The name the associate model dto}
+                    {--modules : The base path to the dto class}
+                    {--base_path : The base path to the dto class}
+                    {--path= : The path to the dto class}
+                    {--namespace= : The namespace of the dto class}
+                    {--api-version=v1 : Specify the API version for the dto}
+                    {--force : Force update the dto}';
+```
+
+#### Command Options
+- **`{name}`**: The name of the update-dto you want to generate.
+- **`--model=`**: Optional. The name of the associated model for the DTO.
+- **`--modules`**: Optional. If you want to package the DTO class within a "modules" folder, you can use this option. It allows you to organize your DTOs within a specific directory named "modules."
+- **`--base_path`**: Optional. This option allows you to specify the base path for the DTO class. If you want the DTO class to be located at the root of the Laravel project, you can use this option.
+- **`--path=`**: Optional. This option allows you to specify a custom path for the DTO class within your Laravel project. You can use it to define the location of the DTO class.
+- **`--namespace=`**: Optional. The namespace of the DTO class.
+- **`--api-version=`**: Optional. Specify the API version for the DTO.
+- **`--force`**: Optional. Force update the DTO, overwriting existing files with the same name.
+
+#### Command Usage
+
+##### Basic Usage
+To generate a update DTO, run the following command:
+
+```bash
+php artisan generate:update-dto {name}
+```
+Replace `{name}` with the desired name of your update DTO.
+
+##### Additionnal Options
+In addition to the basic usage, the `php artisan generate:update-dto` command provides several additional options for more customization:
+
+- [**`--model={model_name}`**](#specify-the-associated-model-of-the-update-dto): Specifies the name of the associated model for the DTO. This option helps you define the relationship between the DTO and the model.
+
+- [**`--base_path`**](#customizing-base-path-for-update-dto): Specifies the base path to the DTO class. You can use this option to define the root directory for your DTOs.
+
+- [**`--modules`**](#organizing-update-dto-within-modules): Sets the base path folder for the DTO class. Use this option if you want to organize your DTOs within a specific directory.
+
+- [**`--path={path}`**](#custom-path-for-update-dto): Sets the path to the DTO class. Use this option to specify the location of the DTO class within your project.
+
+- [**`--namespace[={namespace}]`**](#customizing-update-dto-namespace): Defines the namespace of the DTO class. You can use this option to place your DTOs within a specific namespace.
+
+- [**`--api-version[={version}]`**](#specify-update-dto-api-version): Specifies the API version for the DTO. Use this option if your DTOs are related to a specific API version.
+
+- [**`--force`**](#force-update-dto-creation): If you want to forcefully generate a DTO file, even if a DTO file with the same name already exists, you can use the --force option.
+
+
+These additional options allow you to tailor the DTO generation process to your specific project requirements, providing flexibility and organization in managing your DTOs.
+
+
+##### Specify the Associated Model
+You can specify an associated model for your update DTO using the `--model` option. This is useful when your update DTO is closely tied to a particular model's data structure:
+
+```bash
+php artisan generate:update-dto {name} [--model={model_name}]
+```
+- **`{name}`**: The name of the update-dto you want to generate.
+- **`--model=`**: Optional. The name of the associated model for the DTO.
+- **`{model_name}`**: Optional. The name of the associated model for the DTO.
+- **`--model={model_name}`**: Specify the name of the associated model. This option helps you define the relationship between the update DTO and the model.
+
+###### Example
+Let's say you want to update a update DTO for handling user data transfers during resource creation in your application associated with the `User` model. You can use the following command:
+
+```bash
+php artisan generate:update-dto UserUpdateDTO --model=User
+```
+This command will generate a new `UserUpdateDTO` class in your Laravel project, which you can use for structuring and managing user-related data transfers during resource creation.
+
+##### Force Creation
+If you want to forcefully generate a update DTO file, even if a update DTO file with the same name already exists, you can use the `--force` option:
+This is useful when your update DTO is closely tied to a particular model's data structure:
+
+```bash
+php artisan generate:update-dto {name} [--force]
+```
+- **`{name}`**: The name of your desired update DTO class. This command will update a new DTO file with this name.
+- **`--force`**: Optional. This option allows you to update the update DTO file forcefully, overwriting any existing file with the same name.
+
+###### Example
+Let's say you want to update a update DTO for handling user data transfers during resource creation in your application associated with the `User` model. You can use the following command to force the creation, even if a `UserUpdateDTO` file already exists:
+
+
+```bash
+php artisan generate:update-dto UserUpdateDTO --force
+```
+This command will generate a new `UserUpdateDTO` class in your Laravel project, which you can use for structuring and managing user-related data transfers during resource creation.
+
+
+***Note:*** The `--force` option is a valuable tool when you need to generate a update DTO file without being hindered by existing files with the same name. It enables you to overwrite any pre-existing update DTO file and ensure that your Laravel project maintains the desired structure and organization.
+
+
+##### Specify API Version
+
+If your update DTOs are related to a specific API version, you can specify it using the `--api-version` option:
+
+```bash
+php artisan generate:update-dto {name} [--api-version[={version}]]
+```
+- **`{name}`**: The name of your desired update DTO class. This command will update a new DTO file with this name.
+- **`--api-version`**: Optional. This option allows you to specify the desired API version for the update DTO.
+- **`{version}`**: Optional. The version number you want to associate with the update DTO.
+- **`--api-version[={version}]`**: Use this option to specify the API version for the update DTO. It helps categorize and manage update DTOs based on different API versions.
+
+###### Example
+Let's say you have an API with version `v2`, and you want to update a update DTO named `ProductUpdateDTO` for that version. You can use the following command:
+
+```bash
+php artisan generate:update-dto ProductUpdateDTO --api-version=v2
+```
+This command will generate a `ProductUpdateDTO` class associated with API version `v2` in your Laravel project.
+
+***Note:*** Utilizing the --api-version option when generating update DTOs can be particularly useful for organizing and managing your DTOs based on different API versions within your Laravel application. This allows for efficient data transfer and structuring processes tailored to specific API requirements.
+
+##### Customizing Namespace
+You can customize the namespace for your update DTO class using the `--namespace` option:
+
+```bash
+php artisan generate:update-dto {name} [--namespace[={namespace_value}]]
+```
+- **`{name}`**: The name of your desired update DTO class. This command will update a new DTO file with this name.
+- **`--namespace`**: Optional. This option allows you to specify the desired namespace for the update DTO.
+- **`{namespace_value}`**: Optional. The custom namespace you want to associate with the update DTO class.
+- **`--namespace[={namespace_value}]`**: Use this option to set the desired namespace for the update DTO class. It enables you to efficiently organize your update DTOs within your Laravel application.
+
+###### Example
+To illustrate how to use the `--namespace` option when generating a update DTO, let's assume you want to update a update DTO named `UserUpdateDTO` and place it within the `App\DTOs` namespace. You can accomplish this by running the following command:
+
+
+```bash
+php artisan generate:update-dto UserUpdateDTO --namespace=App\\DTOs
+```
+This command will generate the `UserUpdateDTO` class with the specified namespace, ensuring that it's organized in the `App\DTOs` namespace within your Laravel application.
+
+***Note:*** These command descriptions and examples provide you with a comprehensive understanding of how to use the `php artisan generate:update-dto` command to efficiently manage Data Transfer Objects (DTOs) in your Laravel application. Utilize the various options and examples to tailor DTO generation according to your specific project requirements, enhancing data transfer and structuring processes.
+
+
+#### Customizing DTO Directory Structure
+
+When generating Data Transfer Objects (DTOs) with the `php artisan generate:update-dto` command, you have the flexibility to customize the directory structure in which the DTOs are generated. You can combine the following options to update a directory structure that suits your project's organization:
+
+- **`--base_path`**: Use this option if you want to generate the DTO within the base path of your Laravel project. It sets the root directory for your DTOs.
+
+- **`--modules`**: If your project follows a modular structure and you want to package the DTO within a "modules" folder, use this option.
+
+- **`--path`**: This option allows you to define a custom path where the update DTO class should be generated within your Laravel project. You can specify a path relative to your project's root directory.
+
+Here's how you can use these options to update a custom directory structure for your update DTOs:
+
+```bash
+php artisan generate:update-dto {name} [--base_path] [--modules] [--path[={path}]]
+```
+- **`{name}`**: The name of your desired update DTO class. This command will update a new DTO file with this name.
+- **`--base_path`**: Optional. Use this option to generate the update DTO class at the root of your Laravel project. When included, the update DTO will be placed at the root of your project, allowing for organization outside the app folder.
+- **`--modules`**: Optional. This option allows you to generate the update DTO class within a `modules` folder in your Laravel project.
+- **`--path`**: Optional. Use this option to define a custom path where the update DTO class should be generated within your Laravel project.
+- **`{path}`**: Optional. Specify the custom path where the update DTO should be updated.
+- **`--path[={path}]`**: Use this option to set a custom path for creating the update DTO. It allows you to specify the location of the DTO class within your project based on your project's structure.
+
+
+##### Custom Path for DTO
+To specify a custom path for DTO generation, you can use the `--path` option:
+
+```bash
+php artisan generate:update-dto {name} [--path[={path}]]
+```
+- **`{name}`**: The name of your desired update DTO class. This command will update a new DTO file with this name.
+- **`--path`**: Optional. Use this option to define a custom path where the update DTO class should be generated within your Laravel project.
+- **`{path}`**: Optional. Specify the custom path where the update DTO should be updated.
+- **`--path[={path}]`**: Use this option to set a custom path for creating the update DTO. It allows you to specify the location of the DTO class within your project based on your project's structure.
+
+###### Example
+To update a update DTO within a custom path, such as `app/DTOs`, you can use the following command:
+
+
+```bash
+php artisan generate:update-dto OrderUpdateDTO --path=app/DTOs
+```
+This command will generate the OrderUpdateDTO class in the specified custom path, allowing you to organize your DTOs according to your project's structure.
+
+***Note:*** The `--path` option provides flexibility in determining the location where your update DTOs are generated, allowing you to adhere to your project's organization conventions.
+
+
+##### Customizing Base Path
+You can customize the base path for your update DTO class using the `--base_path` option:
+
+```bash
+php artisan generate:update-dto {name} [--base_path]
+```
+- **`{name}`**: The name of your desired update DTO class. This command will update a new DTO file with this name.
+- **`--base_path`**: Optional. Use this option to generate the update DTO class at the root of your Laravel project. When included, the update DTO will be placed at the root of your project, allowing for organization outside the app folder.
+
+###### Example
+To generate a update DTO class at the root of your Laravel project, you can use the following command:
+
+```bash
+php artisan generate:update-dto UserUpdateDTO --base_path
+```
+This command will update the UserUpdateDTO class at the root of your Laravel project.
+
+
+##### Organizing within Modules
+You can customize the base path for your update DTO class using the `--modules` option:
+
+```bash
+php artisan generate:update-dto {name} [--modules]
+```
+- **`{name}`**: The name of your desired update DTO class. This command will update a new DTO file with this name.
+- **`--modules`**: Optional. This option allows you to generate the update DTO class within a `modules` folder in your Laravel project.
+
+###### Example
+To generate a update DTO within a `modules` folder at the root of your Laravel project, you can use the following command:
+
+```bash
+php artisan generate:update-dto ProductUpdateDTO --modules
+```
+This command will update the `ProductUpdateDTO` class within a `modules` folder.
+
+
+##### Extra
+
+You can combine these options to update a custom directory structure tailored to your project's needs. Here are some examples:
+
+- To place update DTOs within a `modules` folder at the base path:
+
+```bash
+php artisan generate:update-dto {name} [--base_path] [--modules]
+```
+
+***Example:***
+```bash
+php artisan generate:update-dto UserUpdateDTO --base_path  --modules
+```
+
+- To generate update DTOs within a custom folder at the base path:
+
+```bash
+php artisan generate:update-dto {name} [--base_path] [--path[={path}]]
+```
+
+***Example:***
+```bash
+php artisan generate:update-dto UserUpdateDTO --base_path --path=Custom/Folders
+```
+
+- To organize update DTOs within a `modules` folder at the base path and specify a custom path:
+
+```bash
+php artisan generate:update-dto {name} [--base_path] [--modules] [--path[={path}]]
+```
+This combination offers flexibility in structuring your update DTOs to meet your project's specific requirements.
+
+***Example:***
+```bash
+php artisan generate:update-dto UserUpdateDTO --base_path  --modules --path=Custom/Folders
+```
+This example generates a `UserUpdateDTO` class with a directory structure that includes a `modules` folder and a custom path named`Custom/Folders`
+
+***Note:*** By combining these options, you can tailor the organization of your update DTOs to align with your project's specific requirements. Whether you prefer to keep them within the base path, package them in a `modules` folder, or specify a custom path, these options provide you with the flexibility needed for efficient DTO management within your Laravel application.
+
+
+***Note:*** These command descriptions and examples provide you with a comprehensive understanding of how to use the `php artisan generate:update-dto` command to efficiently manage Data Transfer Objects (DTOs) in your Laravel application. Utilize the various options and examples to tailor DTO generation according to your specific project requirements, enhancing data transfer and structuring processes.
+
+### Conclusion
+Managing DTOs is essential for organizing data transfers in your Laravel application. The `php artisan generate:update-dto` command simplifies the process, allowing you to update custom DTOs tailored to your project's needs. By using the provided options, you can efficiently structure and manage your DTOs, enhancing data transfer and structuring processes.
+
+
+
+## Create Request Class Generation
+The `generate:create-request` Artisan command is used to generate a new request class. Request classes are a crucial part of Laravel applications, handling input validation and authorization for incoming requests.
+
+### Command Overview
+You can use the following Artisan command to generate a new request class:
+
+
+```bash
+php artisan generate:create-request {name?} [options]
+
+```
+- **`{name?}`**: Optional. The name of the create request class you want to generate. If not provided, the command will interactively prompt you for it.
+- **`[options]`**: Optional. Additional options or flags to customize the request class generation process.
+
+#### Command Signature
+
+```bash
+php artisan generate:create-request 
+		    {name? : The name of the create request class}
+		    {--base=FormRequest : The base class for the request}
+		    {--dir=app/Http/Requests : The directory to store the request}
+		    {--namespace=App\\Http\\Requests : The namespace for the request}
+		    {--model= : The model class associated with the request}
+		    {--controller=App\\Http\\Controllers : Generate a corresponding controller}
+		    {--api-version=v1 : Specify the API version for the request}
+		    {--dto= : Specify the Data Transfer Object (DTO) class associated with the request}
+		    {--dtoNamespace= : Specify the namespace for the DTO class}
+		    {--force : Force the generation even if the file already exists}
+		    {--validation-rules : Specify the validation rules for the request}
+		    {--validation-messages : Specify the validation messages for the request}
+		    {--policy : Generate a policy for the request}
+		    {--timestamp : Add a timestamp to the filename}
+		    {--test : Generate a test for the request}
+		    {--interactive : Interactively prompt for missing options}
+```
+
+#### Command Options
+
+- **`{name?}`**: Optional. The name of the create request class you want to generate. If not provided, the command will interactively prompt you for it.
+- **`--base={base_class}`**: Optional. Specifies the base class for the request. By default, it extends FormRequest, but you can specify a different base class if needed.
+- **`--dir={directory}`**: Optional. Specifies the directory where the request class should be stored. The default directory is app/Http/Requests.
+- **`--namespace={namespace}`**: Optional. Specifies the namespace for the request class. The default namespace is App\Http\Requests.
+- **`--model={model_class}`**: Optional. Specifies the model class associated with the request. This is useful for generating requests tailored to a specific model.
+- **`--controller={controller_namespace}`**: Optional. Generates a corresponding controller for the request. By default, it uses the App\Http\Controllers namespace.
+- **`--api-version={version}`**: Optional. Specifies the API version for the request. Useful when working with API versions.
+- **`--dto={dto_class}`**: Optional. Specifies the Data Transfer Object (DTO) class associated with the request. Allows for tighter integration between requests and DTOs.
+- **`--dtoNamespace={dto_namespace}`**: Optional. Specifies the namespace for the DTO class.
+- **`--force`**: Optional. Forces the generation of the request class even if a file with the same name already exists.
+- **`--validation-rules`**: Optional. Allows you to specify the validation rules for the request. Useful for custom validation logic.
+- **`--validation-messages`**: Optional. Allows you to specify custom validation messages for the request.
+- **`--policy`**: Optional. Generates a policy for the request, enabling you to define authorization logic.
+- **`--timestamp`**: Optional. Adds a timestamp to the filename of the generated request class.
+- **`--test`**: Optional. Generates a test class for the request, facilitating test-driven development.
+- **`--interactive`**: Optional. Enables interactive prompts for missing options, making it easier to configure the request generation.
+
+#### Command Usage
+##### Basic Usage
+To generate a create request class, you can run the following command:
+
+```bash
+php artisan generate:create-request {name}
+```
+Replace `{name}` with the desired name of your create request class.
+
+##### Additional Options
+In addition to the basic usage, the generate:create-request command provides several additional options for more customization:
+
+
 
 ## Testing
 

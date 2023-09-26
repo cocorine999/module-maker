@@ -63,7 +63,8 @@ class GenerateCreateDTO extends Command
         $namespace = str_replace('/', '\\', $namespace);
 
         if (!class_exists("App\\Models\\$modelName")) {
-            $this->info("Model not exist");
+            $this->error("Model not exist");
+            return;
         }
 
         $model = new ("App\\Models\\{$modelName}")();
