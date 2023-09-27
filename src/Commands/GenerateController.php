@@ -156,7 +156,7 @@ class GenerateController extends Command
 
             $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
       
-            $route_resource = convert_to_kebab_case($modelName);
+            $route_resource = convert_to_kebab_case(convertToSnakeCase($modelName));
 
             $this->call('generate:resource-routes', [
                 'name' => $route_resource,

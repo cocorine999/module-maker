@@ -48,8 +48,6 @@ class GenerateService extends Command
         $namespace = $this->option('namespace');
         $modules = $this->option('modules');
 
-        dd(($this->option('dto')));
-
         $inter_path = null;
         if(!$path){ 
             $inter_path = $name . 's';
