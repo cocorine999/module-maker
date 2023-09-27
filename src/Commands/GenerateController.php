@@ -89,7 +89,9 @@ class GenerateController extends Command
             return;
         }
 
-        $resourceName = Str::studly(convertToSnakeCase($this->option('model') ?? 'user'));
+        $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
+
+        $resourceName = Str::studly(convertToSnakeCase($modelName ?? 'user'));
 
         $namespace = $namespace ?? ucfirst($path);
         $namespace = str_replace('/', '\\', $namespace);
@@ -97,10 +99,10 @@ class GenerateController extends Command
         
         $requestPath = "app/Http/Requests/" . ucfirst($this->option("api-version"));
 
-        if($this->option('model'))
+        if($modelName)
         {
         
-            $requestPath .= "/{$this->option('model')}s/" . strtolower($this->option("api-version"));
+            $requestPath .= "/{$modelName}s/" . strtolower($this->option("api-version"));
 
         }
 
@@ -154,7 +156,7 @@ class GenerateController extends Command
                 '--force'     => $this->option('force'),
             ];
 
-            $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
+            $modelName = $modelName ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
       
             $route_resource = convert_to_kebab_case(convertToSnakeCase($modelName));
 
