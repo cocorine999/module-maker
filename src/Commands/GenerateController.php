@@ -91,7 +91,7 @@ class GenerateController extends Command
 
         $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
 
-        $resourceName = Str::studly(convertToSnakeCase($modelName ?? 'user'));
+        $resourceName = Str::studly(convertToSnakeCase($modelName));
 
         $namespace = $namespace ?? ucfirst($path);
         $namespace = str_replace('/', '\\', $namespace);
