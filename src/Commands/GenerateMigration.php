@@ -56,12 +56,12 @@ class GenerateMigration extends Command
             $this->error("Invalid or empty columns format. Please provide columns in a valid JSON format.");
             return;
         }
-        
-        $table = $this->ask("Please insert the table name (users) ", 'users');
 
         if (!$table && !$createTable) {
-            $this->error("Invalid or empty columns format. Please provide columns in a valid JSON format.");
-            return;
+        
+            $createTable = $this->ask("Please insert the table name (users) ", 'users');
+            /* $this->error("Invalid or empty columns format. Please provide columns in a valid JSON format.");
+            return; */
         }
 
         $migrationName = Str::snake($name);
