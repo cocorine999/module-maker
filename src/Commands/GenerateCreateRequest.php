@@ -45,7 +45,7 @@ class GenerateCreateRequest extends Command
     public function handle()
     {
         $name = $this->argument('name') ?? $name = $this->ask("Enter the create request class name should be in CamelCase (CreateUserRequest) ", "CreateUserRequest");
-        $model = Str::studly(convertToSnakeCase($this->option('model') ?? $model = $this->ask("Enter the create request class name should be in CamelCase (User) ", "User")));
+        $model = Str::studly(convertToSnakeCase($this->option('model') ?? $model = $this->ask("Enter the create request related model class name (User) ", "User")));
         $directory = $this->option('dir') ?? $this->ask('Enter the directory where the create request class should be placed (default: app/Http/Requests)', 'app/Http/Requests');
 
         $dto = Str::studly(convertToSnakeCase($this->option('dto') ?? $this->ask("Enter the dto where the create dto class should be placed (default: Create{$model}DTO)", "Create{$model}DTO")));
