@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Database\Migration;
+
 use LaravelCoreModule\CoreModuleMaker\Helpers\Traits\Database\Backup\BackupDatabaseTrait;
 use LaravelCoreModule\CoreModuleMaker\Helpers\Traits\Database\Migrations\TableMigrationTrait;
 use Illuminate\Database\Migrations\Migration;
@@ -31,9 +33,9 @@ class {{className}} extends Migration
 
     /**
      * Run the migrations.
-     * 
+     *
      * @return void
-     * 
+     *
      * @throws \Throwable
      * @throws \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException If the migration fails.
      */
@@ -47,7 +49,6 @@ class {{className}} extends Migration
         DB::beginTransaction();
 
         try {
-
             $this->{{action}}Table(table_name: '{{table_name}}', can_be_deleted: $this->can_be_deleted, column_definition: function (Blueprint $table) {
                 {{columns}}
             });
@@ -59,16 +60,19 @@ class {{className}} extends Migration
             DB::rollBack();
 
             // Handle the exception (e.g., logging, notification, etc.)
-            throw new \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException(message: 'Failed to migrate "{{table_name}}" table: ' . $exception->getMessage(), previous: $exception);
+            throw new \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException(
+                message: 'Failed to migrate "{{table_name}}" table: ' . $exception->getMessage(),
+                previous: $exception
+            );
         }
     }
 
 
     /**
      * Reverse the migrations.
-     * 
+     *
      * @return void
-     * 
+     *
      * @throws \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException
      */
     public function down(): void
@@ -87,8 +91,10 @@ class {{className}} extends Migration
             DB::rollBack();
 
             // Handle the exception (e.g., logging, notification, etc.)
-            throw new \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException(message: 'Failed to drop "{{table_name}}" table: ' . $exception->getMessage(), previous: $exception);
+            throw new \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException(
+                message: 'Failed to drop "{{table_name}}" table: ' . $exception->getMessage(),
+                previous: $exception
+            );
         }
     }
-
 }

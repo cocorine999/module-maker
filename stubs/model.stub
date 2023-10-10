@@ -6,17 +6,14 @@ namespace App\Models;
 
 use LaravelCoreModule\CoreModuleMaker\Eloquents\Contract\ModelContract;
 {{importation}}
-
-
 /**
  * Class ***`{{modelName}}`***
  *
  * This model represents the `{{table}}` table in the database.
  * It extends the ModelContract class and provides access to the database table associated with the model.
  *
- *
  * {{properties}}
- * 
+ *
  * @package ***`\App\Models`***
  */
 class {{modelName}} extends ModelContract
@@ -37,13 +34,12 @@ class {{modelName}} extends ModelContract
      */
     protected $table = '{{table}}';
 
-    /** 
+    /**
      * The attributes that aren't mass assignable.
      *
      * @var array<int, string>
      */
     public $guarded = [];
-
 
     /**
      * The attributes that are mass assignable.
@@ -99,7 +95,6 @@ class {{modelName}} extends ModelContract
         {{fillableCast}}
     ];
 
-
     /**
      * The accessors to append to the model's array and JSON representation.
      *
@@ -117,5 +112,4 @@ class {{modelName}} extends ModelContract
     protected $with = [
 
     ];
-
 }

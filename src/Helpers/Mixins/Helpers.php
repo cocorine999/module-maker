@@ -342,11 +342,11 @@ if (!function_exists('tableSchema')) {
 
         
         if(!Schema::hasTable($table)){
-            exit("Table doesn't exists. Please migrate the table $table.\n");
+            //exit("Table doesn't exists. Please migrate the table $table.\n");
             return null;
         }
         
-        $excludeColumns = array_merge($excludeColumns, ['id', 'created_by', 'created_at', 'updated_at']);
+        $excludeColumns = array_merge($excludeColumns, ['id', 'created_by', 'created_at', 'updated_at', 'deleted_at', 'status']);
         $schema = \Illuminate\Support\Facades\Schema::connection($connection)->getConnection()->getDoctrineSchemaManager();
         $columns = $schema->listTableColumns($table);
 
@@ -404,7 +404,7 @@ if (!function_exists('convertToSnakeCase')) {
 if(!function_exists('appendCodeToFunction')){
     function appendCodeToFunction($fileContent, $function, $existingContent, $additionalCode) {
 
-        $functionDeclaration = (explode('void', $function)[0]. "void \n\t");
+        $functionDeclaration = (explode('void', $function)[0]. "void\n    ");
 
 
         // Check if the additional code is already present in the existing content
@@ -413,7 +413,7 @@ if(!function_exists('appendCodeToFunction')){
             $modifiedContent = $existingContent . "\n" . $additionalCode;
 
             // Replace the existing content in the file
-            $fileContent = str_replace($function, $functionDeclaration . "{\n" . $modifiedContent . "\n\n\t}\n", $fileContent);
+            $fileContent = str_replace($function, $functionDeclaration . "{\n" . $modifiedContent . "\n\n    }\n", $fileContent);
         }
         
         /* // Use a regular expression to find the function declaration

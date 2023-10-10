@@ -44,13 +44,6 @@ class {{UpdateDtoName}} extends BaseDTO
     {
         $rules = array_merge([
             {{rules}}
-            "created_by"            => [
-                                        "sometimes",
-                                        "string",
-                                        "uuid",
-                                        new ExistsForAuthUserAndUUID
-            ],
-            "status"                => ["sometimes", "boolean", 'in:'.true.','.false],
             'can_be_delete'         => ['sometimes', 'boolean', 'in:'.true.','.false]
         ], $rules);
 
@@ -65,14 +58,6 @@ class {{UpdateDtoName}} extends BaseDTO
     public function messages(array $messages = []): array
     {
         $default_messages = array_merge([
-            "created_by.required"    => "Le champ created_by est requis.",
-            "created_by.string"      => "Le champ created_by doit être une chaîne de caractères.",
-            "created_by.uuid"        => "Le champ created_by doit être un UUID valide.",
-            "created_by.exists"      => "Le champ created_by est invalide.",
-
-            "status.boolean"        => "Le champ status doit être un booléen.",
-            "status.in"             => "Le status doit être 'true' ou 'false'.",
-
             'can_be_delete.boolean' => 'Le champ can_be_delete doit être un booléen.',
             'can_be_delete.in'      => 'Le can_be_delete doit être "true" ou "false".'
         ], $messages);

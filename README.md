@@ -11,16 +11,6 @@
 
 This is a simple and extensible package for improving development time via service and repository for Laravel.
 
-- Enum key value pairs as class constants
-- Full-featured suite of methods
-- Enum instantiation
-- Flagged/Bitwise enums
-- Type hinting
-- Attribute casting
-- Enum artisan generator
-- Validation rules for passing enum key or values as input parameters
-- Localization support
-- Extendable via Macros
 
 Created by [Corine BOCOGA](https://corine.b.github)
 

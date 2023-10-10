@@ -80,9 +80,21 @@ class GenerateModel extends Command
         $exclude = array_keys(array_merge(array_merge(array_flip($info->default_fillable), array_flip($info->default_visible)), array_flip($info->default_guarded)));
 
         if(is_null($attributes = tableSchema($table, $connection))){
-            exit("Table doesn't exists. Please migrate the table $table.");
+
+            $this->warn("Table doesn't exists. Please migrate the table $table.");
+
+            $migrate_table_schema = $this->ask("Do you want to migrate this table schema (y/n) ", 'y');
+            
+            if($migrate_table_schema === 'n') return;
+
+            // Execute the "migrate" command using the call method
+            $this->call('migrate'/* , [
+                '--path' => short_path($migrationFilePath)
+            ] */);
+
+            /* exit("Table doesn't exists. Please migrate the table $table.");
             $this->error("Table doesn't exists. Please migrate the table $table.");
-            return null;
+            return null; */
         }
 
         if(is_null($fillableAttributesWithCast = $this->getTableSchema($table, $connection, $exclude))){
@@ -217,7 +229,7 @@ class GenerateModel extends Command
     {
 
         $dates = array_filter(array_map(function($attribute, $key) use ($excludes) {
-            if(!in_array($key, $excludes, true) && $attribute['type'] === 'datetime'){
+            if(!in_array($key, $excludes, true) && ($attribute['type'] === 'datetime' | $attribute['type'] === 'date')){
                 return "'$key'";
             }
         }, $attributes, array_keys($attributes)));

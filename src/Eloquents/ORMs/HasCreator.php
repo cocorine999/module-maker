@@ -186,6 +186,8 @@ trait HasCreator
     {
         static::creating(function ($model) {
 
+            $user = null;
+            
             // Set the default creator if not already set
             if (!$model->created_by) {
                 if (auth()->check()) {
@@ -194,13 +196,13 @@ trait HasCreator
                 else {
                     try {
                         
-                        $user = User::whereHas('roles', function ($query) {
+                        /* $user = User::whereHas('roles', function ($query) {
                             // For example, check for a specific role name
                             $query->where('slug', 'admin');
                         })->orWhereHas('rolesThroughProfiles', function ($query) {
                             // For example, check for a specific role name
                             $query->where('slug', 'admin');
-                        })->where("status", TRUE)->first(); ///->firstOrFail(); 
+                        })->where("status", TRUE)->first(); ///->firstOrFail();  */
 
                         $model->setCreator($user);
                     } catch (QueryException $exception) {

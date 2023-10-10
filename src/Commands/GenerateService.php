@@ -23,7 +23,7 @@ class GenerateService extends Command
                                     {--namespace= : The namespace of the repository class}
                                     {--modules : The base path to the repository class}
                                     {--model= : The name of the associate model service}
-                                    {--dto=true : The associate dto to the service}
+                                    {--dto : The associate dto to the service}
                                     {--force : Force create the service}';
 
 
@@ -122,8 +122,12 @@ class GenerateService extends Command
         $functionName = 'register';
 
         $function = getFunctionContentFromFile($providerPath, $functionName, true);
-        
-        $registerWriteService = "\n\t\t// Binds the implementation of $readWriteServiceInterface to the $readWriteServiceClass class.\n\t\t\$this->app->bind(\\".convert_file_path_to_namespace($interfaceFilePath)."::class, function (\$app) {\n\t\t\t// Resolve the dependencies required by \\".convert_file_path_to_namespace($classFilePath)."$\n\t\t\t\$".lcfirst($serviceName)."ReadWriteRepository = \$app->make({$serviceName}ReadWriteRepository::class);\n \n\t\t\t\$writeService = \$app->make(\LaravelCoreModule\CoreModuleMaker\Services\Contracts\ReadWriteServiceContract::class, [\$".lcfirst($serviceName)."ReadWriteRepository]);\n \n\t\t\t// Create and return an instance of $readWriteServiceClass\n\t\t\treturn new \\".convert_file_path_to_namespace($classFilePath)."(\$writeService);\n\t\t});";
+
+        $repositoryName = "{$serviceName}ReadWriteRepository";
+        $repositoryNamespace = $this->option("base_path") && $this->option("modules") ? "Modules\\{$serviceName}s\Repositories" : "App\Repositories\\{$serviceName}s";
+        $repositoryNamespace = $this->ask("Enter the read write repository with his namespace ({$repositoryNamespace}\\{$repositoryName}) ", "{$repositoryNamespace}\\{$repositoryName}");
+
+        $registerWriteService = "        // Binds the implementation of $readWriteServiceInterface to the $readWriteServiceClass class.\n        \$this->app->bind(\n            \\".convert_file_path_to_namespace($interfaceFilePath)."::class,\n            function (\$app) {\n                // Resolve the dependencies required by \\".convert_file_path_to_namespace($classFilePath)."$\n                \$".lcfirst($serviceName)."ReadWriteRepository = \$app->make(\\{$repositoryNamespace}::class);\n \n                \$writeService = \$app->make(\n                    \LaravelCoreModule\CoreModuleMaker\Services\Contracts\ReadWriteServiceContract::class,\n                    [\$".lcfirst($serviceName)."ReadWriteRepository]\n                );\n \n                // Create and return an instance of $readWriteServiceClass\n                return new \\".convert_file_path_to_namespace($classFilePath)."(\$writeService);\n            }\n        );";
 
         $fileContent = appendCodeToFunction($fileContent, $function, getFunctionContentFromFile($providerPath, $functionName), $registerWriteService);
 
@@ -162,7 +166,12 @@ class GenerateService extends Command
         $this->info("Service " . '[' . short_path($classFilePath) . ']' . " created successfully.\n");
         $this->info("Interface " . '[' . short_path($interfaceFilePath) . ']' . " created successfully.\n");
 
-        $registerReadService = "\t\t// Binds the implementation of $queryServiceInterface to the $queryServiceClass class.\n\t\t\$this->app->bind(\\".convert_file_path_to_namespace($interfaceFilePath)."::class, function (\$app) {\n\t\t\t// Resolve the dependencies required by \\".convert_file_path_to_namespace($classFilePath)."$\n\t\t\t\$".lcfirst($serviceName)."ReadOnlyRepository = \$app->make({$serviceName}ReadOnlyRepository::class);\n \n\t\t\t\$queryService = \$app->make(\LaravelCoreModule\CoreModuleMaker\Services\Contracts\QueryServiceContract::class, [\$".lcfirst($serviceName)."ReadOnlyRepository]);\n \n\t\t\t// Create and return an instance of $queryServiceClass\n\t\t\treturn new \\".convert_file_path_to_namespace($classFilePath)."(\$queryService);\n\t\t});";
+
+        $repositoryName = "{$serviceName}ReadOnlyRepository";
+        $repositoryNamespace = $this->option("base_path") && $this->option("modules") ? "Modules\\{$serviceName}s\Repositories" : "App\Repositories\\{$serviceName}s";
+        $repositoryNamespace = $this->ask("Enter the read only repository with his namespace ({$repositoryNamespace}\\{$repositoryName}) ", "{$repositoryNamespace}\\{$repositoryName}");
+
+        $registerReadService = "        // Binds the implementation of $queryServiceInterface to the $queryServiceClass class.\n        \$this->app->bind(\n            \\".convert_file_path_to_namespace($interfaceFilePath)."::class,\n            function (\$app) {\n                // Resolve the dependencies required by \\".convert_file_path_to_namespace($classFilePath)."$\n                \$".lcfirst($serviceName)."ReadOnlyRepository = \$app->make(\\{$repositoryNamespace}::class);\n \n                \$queryService = \$app->make(\n                    \LaravelCoreModule\CoreModuleMaker\Services\Contracts\QueryServiceContract::class,\n                    [\$".lcfirst($serviceName)."ReadOnlyRepository]\n                );\n \n                // Create and return an instance of $queryServiceClass\n                return new \\".convert_file_path_to_namespace($classFilePath)."(\$queryService);\n            }\n        );";
         
         $function = getFunctionContentFromFile($providerPath, $functionName, true);
                 
@@ -176,8 +185,7 @@ class GenerateService extends Command
         
         if($base_path) autoload_folder(extract_string(short_path($path)));
 
-
-        if(!empty($this->option('dto')))
+        if($this->option('dto'))
         {
 
             $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
