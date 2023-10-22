@@ -32,7 +32,7 @@ class CoreModuleMakerServiceProvider extends PackageServiceProvider
             ->name('core-modules-maker')
             ->hasConfigFile(["core-modules-maker"])
             ->hasMigration('create_core-modules-maker_table')
-            ->publishesServiceProvider('MyProviderName')
+            //->publishesServiceProvider('MyProviderName')
             ->hasCommands([
                 GenerateMigration::class,
                 GenerateModel::class,

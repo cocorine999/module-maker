@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ModelContract extends Model
 {
     use HasFactory, HasCreator, HasUuids, SoftDeletes;
+    use LogsActivity;
 
 
     /**
