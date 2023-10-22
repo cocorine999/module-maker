@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * Class ModelContract
@@ -273,6 +275,55 @@ class ModelContract extends Model
     public function getRelatedRelationship()
     {
         return $this->with;
+    }
+
+    // Define the custom description for an activity event
+    public function getActivityDescriptionForEvent(string $eventName): string
+    {
+        // You can provide custom descriptions for specific events
+        switch ($eventName) {
+            case 'retrieved':
+                return "The " . convert_to_snake_case(get_class($this)) . " record(s) was retrieved";
+            case 'created':
+                return "A " . convert_to_snake_case(get_class($this)) . " new record was created";
+            case 'updated':
+                return "A " . convert_to_snake_case(get_class($this)) . " record was updated";
+            case 'deleted':
+                return "A " . convert_to_snake_case(get_class($this)) . " record was soft deleted";
+            case 'restored':
+                return "A " . convert_to_snake_case(get_class($this)) . " soft-deleted record was restored";
+            case 'attached':
+                return "Related models were attached to " . convert_to_snake_case(get_class($this)) . " was attached";
+            case 'detached':
+                return "Related models were attached to " . convert_to_snake_case(get_class($this)) . " was detached";
+            case 'synced':
+                return "Related models were synced to " . convert_to_snake_case(get_class($this)) . " was synced";
+            case 'forceDeleted':
+                return "The " . convert_to_snake_case(get_class($this)) . " was permanently deleted";
+            default:
+                return "The " . convert_to_snake_case(get_class($this)) . " experienced an unknown event: $eventName";
+        }
+    }
+
+    public function getActivitylogOptions(){
+
+        // You can configure additional options here
+        return [
+            'logOnlyChanged' => true,  // Log only changed attributes
+            'logName' => 'custom-log', // Custom log name
+            'logAttributes' => ['name', 'email'], // Log only specific attributes
+            'logExceptAttributes' => [],
+            'logOnlyDirty' => true,
+            'logUnguarded' => true, // Log changes to unguarded attributes
+            'submitEmptyLogs' => true, // Do not log if no changes were made
+            'useLogName' => true, // Use the log name in the activity description
+            'defaultLogName' => 'default-log', // Default log name
+            //'logEvents' => ['created', 'updated'], // Log specific events
+            //'logOnly' => ['created'], // Log only specific events
+            //'logExcept' => ['deleted'], // Log all events except specific ones
+            'causer' => Auth::user()->id, // Specify the user responsible for the activity
+            'subject' => $this->id, // Set the subject (the model) for the activity
+        ];
     }
     
 }
