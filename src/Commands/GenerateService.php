@@ -53,17 +53,25 @@ class GenerateService extends Command
             $inter_path = $name . 's';
         }
         if ($base_path) {
-            $path = generate_path(path: $path ? ($modules ? "modules/{$path}" : "services/{$path}") : ($modules ? "modules/" . $inter_path . '/Services/RESTful' : "services/" . $inter_path . '/RESTful'), type: 'base');
+            //$path = generate_path(path: $path ? ($modules ? "modules/{$path}" : "services/{$path}") : ($modules ? "modules/" . $inter_path . '/Services/RESTful' : "services/" . $inter_path . '/RESTful'), type: 'base');
+            $path = $path ? ($modules ? "modules/{$path}" : "services/{$path}") : ($modules ? "modules/" . $inter_path . '/Services/RESTful' : "services/" . $inter_path . '/RESTful');
 
-            $namespace = $namespace ?? ucfirst(short_path($path));
+            $path = $this->ask("Enter the path to the service ($path) ", "$path");
+
+            $path = generate_path($path, type: 'base');
         }
         else{
-            $path = generate_path(path: $path ? $path : "{$path}/Services/" . $inter_path . '/RESTful');
-            $namespace = $namespace ?? ucfirst(short_path($path));
+            //$path = generate_path(path: $path ? $path : "{$path}/Services/" . $inter_path . '/RESTful');
+
+            $path = $path ? $path : "{$path}/Services/" . $inter_path . '/RESTful';
+
+            $path = $this->ask("Enter the path to the service ($path) ", "$path");
+
+            $path = generate_path($path);
         }
 
-        $namespace = str_replace('/', '\\', $namespace);
-        
+        $namespace = str_replace('/', '\\', ($namespace ?? ucfirst(short_path($path))));
+
         // Create the read-write service class file
         $filesystem = new Filesystem();
         $readWriteServiceClass = "{$serviceName}RESTfulReadWriteService";
@@ -82,7 +90,6 @@ class GenerateService extends Command
             $this->error("Service {$readWriteServiceClass} or {$readWriteServiceInterface} already exists.");
             return;
         }
-
 
         // Define the base directory of the package
         $base_folder = dirname(__DIR__, 2);
@@ -123,8 +130,13 @@ class GenerateService extends Command
 
         $function = getFunctionContentFromFile($providerPath, $functionName, true);
 
+        if(preg_match('/^(.*?)\\\\Services/', $namespace, $matches))
+        {
+            $repository_namespace = $matches[1];
+        }
+        
         $repositoryName = "{$serviceName}ReadWriteRepository";
-        $repositoryNamespace = $this->option("base_path") && $this->option("modules") ? "Modules\\{$serviceName}s\Repositories" : "App\Repositories\\{$serviceName}s";
+        $repositoryNamespace = $this->option("base_path") && $this->option("modules") ? "{$repository_namespace}\Repositories" : "App\Repositories\\{$repository_namespace}";
         $repositoryNamespace = $this->ask("Enter the read write repository with his namespace ({$repositoryNamespace}\\{$repositoryName}) ", "{$repositoryNamespace}\\{$repositoryName}");
 
         $registerWriteService = "        // Binds the implementation of $readWriteServiceInterface to the $readWriteServiceClass class.\n        \$this->app->bind(\n            \\".convert_file_path_to_namespace($interfaceFilePath)."::class,\n            function (\$app) {\n                // Resolve the dependencies required by \\".convert_file_path_to_namespace($classFilePath)."$\n                \$".lcfirst($serviceName)."ReadWriteRepository = \$app->make(\\{$repositoryNamespace}::class);\n \n                \$writeService = \$app->make(\n                    \LaravelCoreModule\CoreModuleMaker\Services\Contracts\ReadWriteServiceContract::class,\n                    [\$".lcfirst($serviceName)."ReadWriteRepository]\n                );\n \n                // Create and return an instance of $readWriteServiceClass\n                return new \\".convert_file_path_to_namespace($classFilePath)."(\$writeService);\n            }\n        );";
@@ -168,7 +180,8 @@ class GenerateService extends Command
 
 
         $repositoryName = "{$serviceName}ReadOnlyRepository";
-        $repositoryNamespace = $this->option("base_path") && $this->option("modules") ? "Modules\\{$serviceName}s\Repositories" : "App\Repositories\\{$serviceName}s";
+        //$repositoryNamespace = $this->option("base_path") && $this->option("modules") ? "Modules\\{$serviceName}s\Repositories" : "App\Repositories\\{$serviceName}s";
+        $repositoryNamespace = $this->option("base_path") && $this->option("modules") ? "{$repository_namespace}\Repositories" : "App\Repositories\\{$repository_namespace}";
         $repositoryNamespace = $this->ask("Enter the read only repository with his namespace ({$repositoryNamespace}\\{$repositoryName}) ", "{$repositoryNamespace}\\{$repositoryName}");
 
         $registerReadService = "        // Binds the implementation of $queryServiceInterface to the $queryServiceClass class.\n        \$this->app->bind(\n            \\".convert_file_path_to_namespace($interfaceFilePath)."::class,\n            function (\$app) {\n                // Resolve the dependencies required by \\".convert_file_path_to_namespace($classFilePath)."$\n                \$".lcfirst($serviceName)."ReadOnlyRepository = \$app->make(\\{$repositoryNamespace}::class);\n \n                \$queryService = \$app->make(\n                    \LaravelCoreModule\CoreModuleMaker\Services\Contracts\QueryServiceContract::class,\n                    [\$".lcfirst($serviceName)."ReadOnlyRepository]\n                );\n \n                // Create and return an instance of $queryServiceClass\n                return new \\".convert_file_path_to_namespace($classFilePath)."(\$queryService);\n            }\n        );";
@@ -187,13 +200,13 @@ class GenerateService extends Command
 
         if($this->option('dto'))
         {
-
             $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
-
 
             // Build the arguments and options for the "generate:model" command
             $arguments = ['name' => $modelName];
             $options['--model'] = $modelName;
+            $options['--path'] = str_replace("Modules\\", "", $repository_namespace);
+            ///$options['--namespace'] = "{$repository_namespace}\DataTransfertObjects";
             if($this->option('force'))
                 $options['--force'] = $this->option('force');
             if($this->option('modules'))
@@ -204,6 +217,8 @@ class GenerateService extends Command
             // Execute the "generate:model" command using the call method
             $this->call('generate:dto', array_merge($arguments, $options));
         }
+
+        exec('composer dump-autoload');
 
         unset($filesystem);
         unset($fileContent);

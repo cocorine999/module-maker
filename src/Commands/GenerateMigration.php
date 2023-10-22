@@ -138,8 +138,7 @@ class GenerateMigration extends Command
         foreach ($columns as $columnName => $options) {
 
             if($options['type'] === 'enum'){
-
-                $value = "\$table->{$options['type']}('{$columnName}', {$options['values']})";
+                $value = "\$table->{$options['type']}('{$columnName}', " . json_encode($options['values']) . ")";
             }
             else{
 
@@ -157,7 +156,7 @@ class GenerateMigration extends Command
             if(isset($options['unique']) && $options['unique']){
                 $value .= "->unique()";
             }
-
+            
             $columnDefinitions[] = "$value;";
         }
 

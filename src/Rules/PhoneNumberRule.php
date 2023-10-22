@@ -7,7 +7,10 @@ namespace LaravelCoreModule\CoreModuleMaker\Rules;
 use LaravelCoreModule\CoreModuleMaker\Eloquents\ValueObjects\PhoneNumber;
 use LaravelCoreModule\CoreModuleMaker\Exceptions\InvalidArgumentException;
 use Illuminate\Contracts\Validation\Rule;
-
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use LaravelCoreModule\CoreModuleMaker\Exceptions\Contracts\CoreException;
+use LaravelCoreModule\CoreModuleMaker\Helpers\Enums\Common\ErrorCodeEnum;
 
 /**
  * Class `PhoneNumberRule`
@@ -19,6 +22,33 @@ use Illuminate\Contracts\Validation\Rule;
 class PhoneNumberRule implements Rule
 {
     /**
+     * @var string
+     */
+    protected string $table;
+
+    /**
+     * @var string
+     */
+    protected string $attribute;
+
+    /**
+     * @var string
+     */
+    protected string $column;
+
+    /**
+     * @var CoreException|null
+     */
+    protected ?CoreException $exception;
+
+    public function __construct(string $table = 'users', string $column = 'phone_number')
+    {
+        $this->table = $table;
+        $this->column = $column;
+        $this->exception = null;
+    }
+
+    /**
      * Determine if the validation rule passes.
      *
      * @param  string  $attribute The attribute being validated.
@@ -28,17 +58,25 @@ class PhoneNumberRule implements Rule
     public function passes($attribute, $value)
     {
         try {
-            if(is_string($value) && PhoneNumber::fromString($value))
+            $phone_number = null;
+            if(is_string($value))
             {
-
-                return true;
-
+                $phone_number = PhoneNumber::fromString($value);
             }
-            elseif(new PhoneNumber($value)){
-                return true;
+            elseif(is_array($value))
+            {
+                $phone_number = new PhoneNumber($value);
             }
-            return false;
-        } catch (InvalidArgumentException $exception) {
+            elseif (! $value instanceof PhoneNumber) {
+                throw new InvalidArgumentException('Phone number should be in json format');
+            }
+            
+            if (DB::table('users') ->where($this->column, $phone_number->toJson())->exists()) {
+                $this->exception = new CoreException(message: "The phone number you entered already exists in our records.", error_code: ErrorCodeEnum::VALIDATION_ERROR, status_code: Response::HTTP_UNPROCESSABLE_ENTITY);
+                return false;
+            }
+            return true;
+        } catch (CoreException $prev) {
             return false;
         }
     }
@@ -50,6 +88,6 @@ class PhoneNumberRule implements Rule
      */
     public function message()
     {
-        return 'The :attribute must be a valid phone number.';
+        return $this->exception?->getMessage() ?? 'The :attribute must be a valid phone number.';
     }
 }

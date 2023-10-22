@@ -54,7 +54,7 @@ class GenerateDTO extends Command
         if(!$path) $inter_path = $modelName . 's';
         if ($base_path) {
             ///$path = str_replace('\\', '/', $path);
-            $path = generate_path(path: $path ? ($modules ? "modules/{$path}" : "dataTransfertObjects/{$path}") : ($modules ? "modules/" . $inter_path . '/DataTransfertObjects' : "dataTransfertObjects/" . $inter_path), type: 'base');
+            $path = generate_path(path: $path ? ($modules ? "modules/{$path}/DataTransfertObjects" : "dataTransfertObjects/{$path}") : ($modules ? "modules/" . $inter_path . '/DataTransfertObjects' : "dataTransfertObjects/" . $inter_path), type: 'base');
             
             ///$path = generate_path(path: $path ? ($modules ?  "modules/{$path}" : "dataTransfertObjects/{$path}") : ($modules ? "modules/{$inter_path}/DataTransfertObjects" : "dataTransfertObjects/{$inter_path}" ), type: 'base');
             $namespace = $namespace ?? ucfirst(short_path($path));

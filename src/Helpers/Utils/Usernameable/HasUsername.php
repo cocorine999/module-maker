@@ -14,7 +14,7 @@ trait HasUsername
     public static function bootHasUsername()
     {
         static::creating(function (Model $model) {
-            $model->username = $model->generateAndSetUsername($model);
+            $model->setAttribute($model->getUsernameColumn(), $model->generateAndSetUsername($model));
         });
     }
     
@@ -49,7 +49,7 @@ trait HasUsername
         // Get the last_name and convert to lowercase
         $lastName = strtolower($model->last_name);
 
-        $firstName = strtolower(str_replace([' '], '', $model->first_name));
+        $firstName = strtolower($model->first_name);
 
         // Concatenate first_name and last_name to create the username
         $username = $lastName . $firstName;

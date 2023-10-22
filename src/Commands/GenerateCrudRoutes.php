@@ -79,16 +79,13 @@ class GenerateCrudRoutes extends Command
         // Prompt user for input (e.g., resource name)
         $resourceName = $this->argument('name') ?? $this->ask('Enter the resource name (singular, lowercase):');
 
-        $resourceName = Str::studly(convertToSnakeCase($resourceName));
-        ///$controllerStub = file_get_contents("./../stubs/controller.stub");
+        $resourceName = convert_to_kebab_case($resourceName);//Str::studly(convert_to_snake_case($resourceName));
 
         // Define the base directory of the package
         $base_path = dirname(__DIR__, 2);
 
         // Build the full path to the file.
         $templatePath = "{$base_path}/stubs/routes/resource-routes.stub";
-
-        ///$templatePath = "./../stubs/routes/resource-routes.stub";///base_path('core/Stubs/Routes/resource-routes.stub'); // Replace with your actual template path
         
         $version = str_replace(['v', 'V'], [''], $this->option('versionning'));
 
@@ -96,7 +93,7 @@ class GenerateCrudRoutes extends Command
             createCascadeDirectories("routes/apis/{$this->option('versionning')}");
         }
 
-        $outputPath = base_path("routes/apis/{$this->option('versionning')}/" . strtolower($resourceName) . '-routes.php');
+        $outputPath = base_path("routes/apis/{$this->option('versionning')}/" . convert_to_kebab_case(strtolower($resourceName)) . '-routes.php');
 
         if (!File::exists($templatePath)) {
             $this->error('Template file not found.');
@@ -117,17 +114,17 @@ class GenerateCrudRoutes extends Command
                 }, explode(',', $middlewares))
             );
 
-        $prefix = $this->option('prefix') ?? (convert_to_snake_case($resourceName). 's');
+        $prefix = $this->option('prefix') ?? $resourceName. 's';
 
         $keys = ['{{Module}}', '{{module}}', '{{controller}}', '{{namespace}}', '{{version}}', '{{prefix}}', '{{middlewares}}'];
-        $contentValues = [ucfirst($resourceName), strtolower(convertToSnakeCase($resourceName)), $this->option('controller') ?? "{$resourceName}Controller", $this->option('namespace-for-controller') ?? 'App\Http\Controllers\APIs\RESTful\V1', $this->option('versionning'), $prefix, $middlewares];
+        $contentValues = [Str::studly($resourceName), $resourceName, $this->option('controller') ?? Str::studly($resourceName) . "Controller", $this->option('namespace-for-controller') ?? 'App\Http\Controllers\APIs\RESTful\V1', $this->option('versionning'), $prefix, $middlewares];
 
         $templateContent = File::get($templatePath);
         
         $generatedContent = str_replace($keys, $contentValues, $templateContent);
 
         // Check if the routes file already exists and force option is not provided
-         if (File::exists($outputPath) && !$this->option('force')) {
+        if (File::exists($outputPath) && !$this->option('force')) {
             $apiRoutes = File::get($outputPath);
             if (strpos($apiRoutes, $generatedContent) === false) {
                 // Append the route definitions to the api.php file
@@ -159,7 +156,7 @@ class GenerateCrudRoutes extends Command
 
             file_put_contents($modelFilePath, $modelContent); */
 
-            $this->info("\nAPI REST routes for ". ucfirst(strtolower($resourceName)) . "' generated successfully in a new [". short_path($outputPath)."] file.");
+            $this->info("\nAPI REST routes for ". Str::studly($resourceName) . "' generated successfully in a new [". short_path($outputPath)."] file.");
         }
         
     }

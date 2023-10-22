@@ -9,12 +9,12 @@ use LaravelCoreModule\CoreModuleMaker\Helpers\Mixins\IsEnum;
 
 
 /**
- * Class ***`TypeAssetOwnerEnum`***
+ * Class ***`StateOfLandlord`***
  *
  * This class represents the enumeration of account types in the application.
- * It defines the available account types as constants, including `FULL_ACTIVE`, PARTIEL_ACTIVE and `PASSIVE`.
+ * It defines the available account types as constants, including `ACTIVE`, PARTIALLY_ACTIVE and `PASSIVE`.
  * 
- * The default lead status is set to `FULL_ACTIVE`.
+ * The default lead status is set to `ACTIVE`.
  *
  * @method static array labels()
  *     Get the labels for the account types.
@@ -26,7 +26,7 @@ use LaravelCoreModule\CoreModuleMaker\Helpers\Mixins\IsEnum;
  *
  * @package ***`\LaravelCoreModule\CoreModuleMaker\Helpers\Enums`***;
  */
-enum TypeAssetOwnerEnum: string implements EnumContract
+enum StateOfLandlord: string implements EnumContract
 {
     use IsEnum;
 
@@ -35,14 +35,14 @@ enum TypeAssetOwnerEnum: string implements EnumContract
      *
      * @var string
      */
-    case FULL_ACTIVE             = 'active';
+    case ACTIVE             = 'active';
 
     /**
-     * Represents the partial active asset owner type.
+     * Represents the partially active asset owner type.
      *
      * @var string
      */
-    case PARTIEL_ACTIVE          = 'partial-active';
+    case PARTIALLY_ACTIVE          = 'partially-active';
 
     /**
      * Represents the passive asset owner type.
@@ -56,14 +56,14 @@ enum TypeAssetOwnerEnum: string implements EnumContract
      * 
      * @return string
      */
-    public const DEFAULT          = 'active'; //self::FULL_ACTIVE;
+    public const DEFAULT          = 'partially-active'; //self::ACTIVE;
     
     /**
      * The fallback asset owner type value.
      * 
      * @return string
      */
-    public const FALLBACK         = 'active'; //self::FULL_ACTIVE;
+    public const FALLBACK         = 'partially-active'; //self::ACTIVE;
 
     /**
      * Get the labels for the asset owners type.
@@ -73,9 +73,9 @@ enum TypeAssetOwnerEnum: string implements EnumContract
     public static function labels(): array
     {
         return [
-            self::FULL_ACTIVE    => 'Full active',
-            self::PARTIEL_ACTIVE => 'Partial active',
-            self::PASSIVE        => 'Passive'
+            self::ACTIVE            => 'Active Engagement',
+            self::PARTIALLY_ACTIVE  => 'Intermittent active',
+            self::PASSIVE           => 'No Engagement'
         ];
     }
 
@@ -87,9 +87,9 @@ enum TypeAssetOwnerEnum: string implements EnumContract
     public static function descriptions(): array
     {
         return [
-            self::FULL_ACTIVE    => 'Represents the full active asset owner type.',
-            self::PARTIEL_ACTIVE => 'Represents the partial active asset owner type.',
-            self::PASSIVE        => 'Represents the passive asset owner type.'
+            self::ACTIVE    => 'Active Engagement: These landlords are actively involved in managing their properties and regularly engage with the platform.',
+            self::PARTIALLY_ACTIVE => 'Intermittent Engagement: These landlords may not be as active as the "Active" category but still maintain some level of involvement.',
+            self::PASSIVE        => 'Limited or No Engagement: These landlords have minimal or no engagement with the platform.'
         ];
         
     }

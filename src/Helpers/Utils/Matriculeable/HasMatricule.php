@@ -97,11 +97,18 @@ trait HasMatricule
     private function generateUserMatricule(Model $model)
     {
         $matricule = $this->getResourceIdentifier($model->getTable());
+        $matricule .= "-" . strtoupper($this->generateUniqueNumber());
         $matricule .= "-" . $this->getSexIdentifier($model->sex->value);
-        $matricule .= "-" . $this->getAccountTypeIdentifier($model->type_of_account->value);
-        $matricule .= "-" . $this->generateUniqueNumber();
+        $matricule .= /* "-" .  */$this->getAccountTypeIdentifier($model->type_of_account->value);
+        $matricule .= "-" . $this->generateNDigitRandomNumber(6);
 
         return $matricule;
+    }
+
+
+
+    public function generateNDigitRandomNumber($length){
+        return mt_rand(pow(10,($length-1)),pow(10,$length)-1);
     }
 
     private function getResourceIdentifier(string $resource = 'users')

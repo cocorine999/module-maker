@@ -64,10 +64,14 @@ class PhoneNumber
     public function __construct(array $attributes = [])
     {
         $this->validate($attributes);
+
         // Perform validation or formatting if needed
         $this->country_code = $attributes['country_code'];
-        $this->area_code    = $attributes['area_code'];
-        $this->number      = $this->normalizePhoneNumber($attributes['number']);
+        if(array_key_exists('area_code', $attributes) ){
+            $this->area_code = $attributes['area_code'];
+        }
+        else $this->area_code = null;
+        $this->number = $this->normalizePhoneNumber($attributes['number']);
     }
 
     /**
@@ -185,12 +189,14 @@ class PhoneNumber
      */
     public function toArray(): array
     {
-        // Format thephone number as needed
-        return [
+        // Format telephone number as needed
+        $phone_number = [
             "country_code" => $this->country_code,
-            "area_code"    => $this->area_code,
             "number"       => $this->number,
+            "area_code"    => $this->area_code
         ];
+
+        return $phone_number;
     }
 
     /**
@@ -204,7 +210,9 @@ class PhoneNumber
      */
     protected function validate(array $data): bool
     {
-        return $this->validatePhoneNumber($data['number']) && $this->validateCountryCode($data['country_code']) && $this->validateAreaCode($data['area_code']);
+        $result = $this->validatePhoneNumber($data['number']) && $this->validateCountryCode($data['country_code']);
+
+        return $result || ( array_key_exists('area_code', $data) ? $this->validateAreaCode($data['area_code']) : true);
     }
 
     /**
@@ -223,13 +231,13 @@ class PhoneNumber
     public static function fromString(string $phone_number): self
     {
 
-        static::validateStringPhoneNumber($phone_number);
+        // static::validateStringPhoneNumber($phone_number);
 
         // Extract the country code
-        $country_code = static::extractCountryCode($phone_number );
+        $country_code = static::extractCountryCode($phone_number);
 
         // Extract the area code
-        $area_code = static::extractAreaCode($phone_number );
+        $area_code = static::extractAreaCode($phone_number);
 
         // No parentheses, Extract the subscriber number
         $subscriber_number = static::extractSubscriberNumber($phone_number, (string) $country_code, (string) $area_code);
@@ -350,11 +358,11 @@ class PhoneNumber
      * @return void
      * @throws \LaravelCoreModule\CoreModuleMaker\Exceptions\InvalidArgumentException If the phone number does not match the expected format.
      */
-    public static function validateStringPhoneNumber($phone_number)
+    public static function validateStringPhoneNumber(string $phone_number)
     {
         // Define the regular expression pattern for phone number validation
         $pattern = '/^\+([1-9]\d{0,2})\s?(?:\((?!0{2,3}\))([1-9]\d{1,2})\)\s?)?(\d{8,11})$/';
-
+        
         // Validate the phone number against the pattern
         if(!preg_match($pattern, $phone_number))
             throw new \LaravelCoreModule\CoreModuleMaker\Exceptions\InvalidArgumentException('Invalid phone number format');
@@ -485,5 +493,8 @@ class PhoneNumber
         }
     }
 
+    public function getIdentifier(){
+        return (int) preg_replace('/[^0-9]/', '', $this->toString());
+    }
 
 }

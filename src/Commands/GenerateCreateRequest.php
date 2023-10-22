@@ -59,32 +59,38 @@ class GenerateCreateRequest extends Command
 
         $create_stub = file_get_contents($stub_path);
 
-        $filename = base_path("$directory/$name.php");
+        $filename = base_path("$directory/$name");
 
-        if (!file_exists("{$directory}/")) {
+        $path = $this->ask("Enter the path to the create request (". short_path($filename) .") ", short_path($filename));
+
+        $file_path = generate_path($path, 'base') . ".php";
+
+        $directory = short_path(str_replace([ "/" . $name, '.php'], "", short_path($file_path)));
+
+        if (!file_exists(($directory) . "/")) {
             createCascadeDirectories("{$directory}/");
         }
 
-        if (File::exists($filename) && !$this->option("force")) {
+        if (File::exists($file_path) && !$this->option("force")) {
             $this->warn('Request class ' . $name . ' already exists. Use --force to overwrite.');
             return;
         }
         
-        $requestNamespace = ucfirst(str_replace(["/", ".php"], ["\\", ""], short_path($filename)));
+        $requestNamespace = ucfirst(str_replace(["/", ".php"], ["\\", ""], short_path($file_path)));
 
         $namespace = ucfirst(str_replace(["/"], ["\\"], short_path($directory)));
 
         $create_stub = str_replace(['{{requestName}}', "{{requestNamespace}}", "{{Module}}", "{{module}}", "{{namespace}}", "{{dto}}", "{{dtoNamespace}}"], [$name, $requestNamespace, $model, strtolower(convertToSnakeCase($model)), $namespace, $dto, $dtoNamespace], $create_stub);
         
-        file_put_contents($filename, $create_stub);
+        file_put_contents($file_path, $create_stub);
     
-        $this->info("Request class " . '[' . short_path($filename) . ']' . " generated successfully!");
+        $this->info("Request class " . '[' . short_path($file_path) . ']' . " generated successfully!");
 
         $firstString = explode('\\', $dtoNamespace)[0];
 
         $file_path = str_replace($firstString, strtolower(convertToSnakeCase($firstString)), "{$dtoNamespace}\\{$dto}.php");
 
-        if (!File::exists($file_path)){
+        if (!File::exists(str_replace("\\", "/",$file_path))){
 
             // Build the arguments and options for the "generate:create-dto" command
             $arguments = ['name' => $dto];

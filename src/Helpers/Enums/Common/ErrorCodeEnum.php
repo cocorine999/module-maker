@@ -28,7 +28,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'UNKNOWN_ERROR'
      * Value : 1000
      *
-     * @var string
+     * @var int
      */
     const UNKNOWN_ERROR                              = 1000;
 
@@ -38,7 +38,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'INVALID_ARGUMENT'
      * Value : 1001
      *
-     * @var string
+     * @var int
      */
     const INVALID_ARGUMENT                           = 1001;
 
@@ -48,7 +48,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'INVALID_INPUT_ERROR'
      * Value : 1002
      *
-     * @var string
+     * @var int
      */
     const INVALID_INPUT_ERROR                        = 1002;
 
@@ -58,7 +58,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'ACCESS_DENIED'
      * Value : 1003
      *
-     * @var string
+     * @var int
      */
     const ACCESS_DENIED                              = 1003;
 
@@ -68,7 +68,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'AUTHENTICATION_FAILED'
      * Value : 1004
      *
-     * @var string
+     * @var int
      */
     const AUTHENTICATION_FAILED                      = 1004;
 
@@ -78,7 +78,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'AUTHORIZATION_FAILED'
      * Value : 1005
      *
-     * @var string
+     * @var int
      */
     const AUTHORIZATION_FAILED                       = 1005;
 
@@ -88,7 +88,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'NOT_FOUND'
      * Value : 1006
      *
-     * @var string
+     * @var int
      */
     const NOT_FOUND                                  = 1006;
 
@@ -98,7 +98,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'FILE_UPLOAD_FAILED'
      * Value : 1007
      *
-     * @var string
+     * @var int
      */
     const VALIDATION_ERROR                           = 1007;
 
@@ -108,7 +108,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'FILE_UPLOAD_FAILED'
      * Value : 1008
      *
-     * @var string
+     * @var int
      */
     const FILE_UPLOAD_FAILED                         = 1008;
 
@@ -118,7 +118,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'FILE_NOT_FOUND_ERROR'
      * Value : 1009
      *
-     * @var string
+     * @var int
      */
     const FILE_NOT_FOUND_ERROR                       = 1009;
 
@@ -128,7 +128,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'DATABASE_ERROR'
      * Value : 1010
      *
-     * @var string
+     * @var int
      */
     const DATABASE_ERROR                             = 1010;
 
@@ -138,7 +138,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'DATABASE_CONNECTION_ERROR'
      * Value : 1011
      *
-     * @var string
+     * @var int
      */
     const DATABASE_CONNECTION_ERROR                  = 1011;
 
@@ -148,7 +148,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'SQL_EXCEPTION'
      * Value : 1012
      *
-     * @var string
+     * @var int
      */
     const SQL_EXCEPTION                              = 1012;
 
@@ -158,7 +158,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'QUERY_EXCEPTION'
      * Value : 1013
      *
-     * @var string
+     * @var int
      */
     const QUERY_EXCEPTION                            = 1013;
 
@@ -168,7 +168,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'API_ERROR'
      * Value : 1014
      *
-     * @var string
+     * @var int
      */
     const API_ERROR                                  = 1014;
 
@@ -178,7 +178,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'SERVICE_UNAVAILABLE'
      * Value : 1015
      *
-     * @var string
+     * @var int
      */
     const SERVICE_UNAVAILABLE                        = 1015;
 
@@ -188,7 +188,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'PERMISSION_DENIED_ERROR'
      * Value : 1016
      *
-     * @var string
+     * @var int
      */
     const PERMISSION_DENIED_ERROR                    = 1016;
 
@@ -198,7 +198,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'INVALID_JSON_ARGUMENT'
      * Value : 1017
      *
-     * @var string
+     * @var int
      */
     const INVALID_JSON_ARGUMENT                      = 1017;
 
@@ -208,7 +208,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'DATABASE_MIGRATION_EXCEPTION'
      * Value : 1018
      *
-     * @var string
+     * @var int
      */
     const DATABASE_MIGRATION_EXCEPTION               = 1018;
 
@@ -218,7 +218,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'INTERNAL_SERVER_ERROR'
      * Value : 1019
      *
-     * @var string
+     * @var int
      */
     const INTERNAL_SERVER_ERROR                      = 1019;
 
@@ -228,7 +228,7 @@ enum ErrorCodeEnum:int implements EnumContract
      * Key   : 'PDO_EXCEPTION'
      * Value : 1020
      *
-     * @var string
+     * @var int
      */
     const PDO_EXCEPTION                             = 1020;
 

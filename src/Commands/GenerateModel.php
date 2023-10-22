@@ -87,10 +87,12 @@ class GenerateModel extends Command
             
             if($migrate_table_schema === 'n') return;
 
+            $table = "create_" . convertToSnakeCase($name) . "s_table.php";
+
             // Execute the "migrate" command using the call method
-            $this->call('migrate'/* , [
-                '--path' => short_path($migrationFilePath)
-            ] */);
+            $this->call('migrate' , [
+                '--path' => short_path($table)
+            ]);
 
             /* exit("Table doesn't exists. Please migrate the table $table.");
             $this->error("Table doesn't exists. Please migrate the table $table.");

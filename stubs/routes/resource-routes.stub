@@ -31,61 +31,100 @@ Route::middleware([{{middlewares}}])->group(function () {
         // Routes for '{{module}}s' resource
         Route::name('{{module}}s.')->group(function () {
             Route::prefix('{{prefix}}')->group(function () {
-
                 // Get all {{module}}s
-                Route::get('/',                                              [\{{namespace}}\{{controller}}::class, 'index'])->name('index');
+                Route::get(
+                    '/',
+                    [\{{namespace}}\{{controller}}::class, 'index']
+                )->name('index');
 
                 // Create a new {{module}}
-                Route::post('/',                                             [\{{namespace}}\{{controller}}::class, 'store{{Module}}'])->name('store');
+                Route::post(
+                    '/',
+                    [\{{namespace}}\{{controller}}::class, 'store{{Module}}']
+                )->name('store');
 
                 // Get a single {{module}} by ID
-                Route::get('{{{module}}}',                                         [\{{namespace}}\{{controller}}::class, 'show'])->name('show');
+                Route::get(
+                    '{{{module}}}',
+                    [\{{namespace}}\{{controller}}::class, 'show']
+                )->name('show');
+
+                // Update an existing {{module}} or add to the data if not exist
+                Route::put(
+                    '{{{module}}}',
+                    [\{{namespace}}\{{controller}}::class, 'update{{Module}}']
+                )->name('update');
 
                 // Update an existing {{module}}
-                Route::put('{{{module}}}',                                         [\{{namespace}}\{{controller}}::class, 'update{{Module}}'])->name('update');
+                Route::patch(
+                    '{{{module}}}',
+                    [\{{namespace}}\{{controller}}::class, 'update{{Module}}']
+                )->name('update');
 
                 // Soft delete an {{module}}
-                Route::delete('{{{module}}}',                                      [\{{namespace}}\{{controller}}::class, 'softDelete'])->name('soft-delete');
+                Route::delete(
+                    '{{{module}}}',
+                    [\{{namespace}}\{{controller}}::class, 'softDelete']
+                )->name('soft-delete');
 
                 // Permanently delete an {{module}}
-                Route::delete('{{{module}}}/permanently',                          [\{{namespace}}\{{controller}}::class, 'permanentDelete'])->name('permanently');
-
+                Route::delete(
+                    '{{{module}}}/permanently',
+                    [\{{namespace}}\{{controller}}::class, 'permanentDelete']
+                )->name('permanently');
             });
 
             Route::prefix('trash-{{module}}s')->group(function () {
-
                 // Get trashed {{module}}s
-                Route::get('/',                                              [\{{namespace}}\{{controller}}::class, 'loadTrash'])->name('trashed');
+                Route::get(
+                    '/',
+                    [\{{namespace}}\{{controller}}::class, 'loadTrash']
+                )->name('trashed');
 
                 // Restore an {{module}} from trash
-                Route::patch('{{{module}}}/restore',                               [\{{namespace}}\{{controller}}::class, 'restoreFromTrash'])->name('restore-from-trash');
+                Route::patch(
+                    '{{{module}}}/restore',
+                    [\{{namespace}}\{{controller}}::class, 'restoreFromTrash']
+                )->name('restore-from-trash');
 
                 // Restore all {{module}}s from trash
-                Route::patch('restore-all',                                  [\{{namespace}}\{{controller}}::class, 'restoreAllFromTrash'])->name('restore-all');
+                Route::patch(
+                    'restore-all',
+                    [\{{namespace}}\{{controller}}::class, 'restoreAllFromTrash']
+                )->name('restore-all');
 
                 // Permanently delete an {{module}} from trash
-                Route::delete('{{{module}}}/delete-permanently',                   [\{{namespace}}\{{controller}}::class, 'deletePermanentlyFromTrash'])->name('delete-permanently-from-trash');
+                Route::delete(
+                    '{{{module}}}/delete-permanently',
+                    [\{{namespace}}\{{controller}}::class, 'deletePermanentlyFromTrash']
+                )->name('delete-permanently-from-trash');
 
                 // Empty the trash (permanently delete all trashed {{module}}s)
-                Route::delete('empty',                                       [\{{namespace}}\{{controller}}::class, 'emptyTrash'])->name('empty-trash');;
+                Route::delete(
+                    'empty',
+                    [\{{namespace}}\{{controller}}::class, 'emptyTrash']
+                )->name('empty-trash');
             });
 
             Route::group([], function () {
-
                 // Filter {{Module}}s (via POST request)
-                Route::post('/filter-{{module}}s',                                [\{{namespace}}\{{controller}}::class, 'filter{{Module}}s'])
-                    ->name('filter');
+                Route::post(
+                    '/filter-{{module}}s',
+                    [\{{namespace}}\{{controller}}::class, 'filter{{Module}}s']
+                )->name('filter');
 
                 // Filter {{Module}}s by Date Range
-                Route::get('/{{module}}s/filter-by-date-range',                   [\{{namespace}}\{{controller}}::class, 'filterByDateRange'])
-                    ->name('filter.by_date_range');
+                Route::get(
+                    '/{{module}}s/filter-by-date-range',
+                    [\{{namespace}}\{{controller}}::class, 'filterByDateRange']
+                )->name('filter.by_date_range');
 
                 // Filter {{Module}}s by Status
-                Route::get('/{{module}}s/filter-by-status',                       [\{{namespace}}\{{controller}}::class, 'filterByStatus'])
-                    ->name('filter.by_status');
-
+                Route::get(
+                    '/{{module}}s/filter-by-status',
+                    [\{{namespace}}\{{controller}}::class, 'filterByStatus']
+                )->name('filter.by_status');
             });
         });
-        
     });
 });

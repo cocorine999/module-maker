@@ -108,7 +108,9 @@ class GenerateController extends Command
 
         $requestNamespace = str_replace('/', '\\', ucfirst($requestPath));
 
-        $controllerContent = $this->generateControllerContent(controllerName: $controllerName, namespace: $namespace, resourceName: $resourceName, requestNamespace: $requestNamespace );
+        $serviceNamespace = $this->ask("Enter the service namespace (App\Repositories\\{$resourceName}s) ", "App\Repositories\\{$resourceName}s");
+
+        $controllerContent = $this->generateControllerContent(controllerName: $controllerName, namespace: $namespace, resourceName: $resourceName, requestNamespace: $requestNamespace, serviceNamespace: $serviceNamespace );
         
         file_put_contents($controllerPath, $controllerContent);
 
@@ -121,33 +123,42 @@ class GenerateController extends Command
             else $this->bindRepositories($resourceName, $namespace . "\\" . $controllerName);
         }
 
-        if($this->option('request')){
+        if($this->option('request') && (!file_exists($requestPath))){
 
-            $resourceName = Str::studly(convertToSnakeCase($resourceName));
+            $create_filepath = $requestPath."/Create{$resourceName}Request". ".php";
 
-            // Build the arguments and options for the "make:create-request" command
-            $arguments = ['name' => "Create{$resourceName}Request"];
-            $options['--model'] = $resourceName;
-            $options['--api-version'] = $this->option("api-version");
-            $options['--dir'] = $requestPath;
-            if($this->option('force'))
-                $options['--force'] = $this->option('force');
+            if(!file_exists($create_filepath)){
 
-            // Execute the "generate:create-request" command using the call method
-            $this->call('generate:create-request', [...$arguments, ...$options]);
+                $resourceName = Str::studly(convertToSnakeCase($resourceName));
 
+                // Build the arguments and options for the "make:create-request" command
+                $arguments = ['name' => "Create{$resourceName}Request"];
+                $options['--model'] = $resourceName;
+                $options['--api-version'] = $this->option("api-version");
+                $options['--dir'] = $requestPath;
+                if($this->option('force'))
+                    $options['--force'] = $this->option('force');
 
-            $resourceName = Str::studly(convertToSnakeCase($resourceName));
+                // Execute the "generate:create-request" command using the call method
+                $this->call('generate:create-request', [...$arguments, ...$options]);
+            }
 
-            // Build the arguments and options for the "make:update-request" command
-            $arguments = ['name' => "Update{$resourceName}Request"];
-            $options['--model'] = $resourceName;
+            $update_filepath = $requestPath."/Update{$resourceName}Request". ".php";
 
-            // Execute the "generate:update-request" command using the call method
-            $this->call('generate:update-request', array_merge($arguments, $options));
+            if(!file_exists($update_filepath)){
+                $resourceName = Str::studly(convertToSnakeCase($resourceName));
+
+                // Build the arguments and options for the "make:update-request" command
+                $arguments = ['name' => "Update{$resourceName}Request"];
+                $options['--model'] = $resourceName;
+
+                // Execute the "generate:update-request" command using the call method
+                $this->call('generate:update-request', array_merge($arguments, $options));
+            }
         }
 
         if($this->option('route')){
+
             $params = [
                 '--controller' => $controllerName,
                 '--controller-path' => short_path($path),
@@ -166,9 +177,11 @@ class GenerateController extends Command
             ]);
         }
 
+        exec('composer dump-autoload');
+
     }
 
-    protected function generateControllerContent($controllerName, $namespace = "App\Http\Controllers\APIs\RESTful\\v1", $resourceName = 'User', $requestNamespace = "App\Http\Requests")
+    protected function generateControllerContent($controllerName, $namespace = "App\Http\Controllers\APIs\RESTful\\v1", $resourceName = 'User', $serviceNamespace = 'App\Services', $requestNamespace = "App\Http\Requests")
     {
 
         // Define the base directory of the package
@@ -177,10 +190,10 @@ class GenerateController extends Command
         // Build the full path to the file.
         $path = "{$base_path}/stubs/controller.stub";
 
-        $resourceNamespace = "Modules\\" . $resourceName . "s\Services";
+        $resourceNamespace = "Modules\\" . $resourceName . "\Services";
         $controllerStub = file_get_contents($path);
 
-        return str_replace(['{{resourceController}}', '{{namespace}}', '{{module}}', '{{resourceNamespace}}', '{{resourceName}}', '{{requestNamespace}}'], [$controllerName, $namespace, strtolower($resourceName), $resourceNamespace, $resourceName, $requestNamespace], $controllerStub);
+        return str_replace(['{{resourceController}}', '{{namespace}}', '{{module}}', '{{resourceNamespace}}', '{{resourceName}}', '{{requestNamespace}}', '{{serviceNamespace}}'], [$controllerName, $namespace, strtolower($resourceName), $resourceNamespace, $resourceName, $requestNamespace, $serviceNamespace], $controllerStub);
     }
 
     protected function bindRepositories(string $resourceName, string $controllerNamespace, string $providerName = "RepositoryServiceProvider")
@@ -195,8 +208,11 @@ class GenerateController extends Command
                 'name' => $providerName 
             ]);
         }
+        
+        $repositoryName = "{$resourceName}ReadOnlyRepository";
+        $repositoryNamespace = $this->option('repository-namespace') ?? (($this->option('repository-base-path')) ? "Modules\\{$resourceName}s\Repositories" : "App\Repositories\\{$resourceName}s");
+        $repositoryNamespace = $this->ask("Enter the read only repository with his namespace ({$repositoryNamespace}\\{$repositoryName}) ", "{$repositoryNamespace}\\{$repositoryName}");
 
-        $repositoryNamespace = $this->option('repository-namespace') ?? ( ($this->option('repository-base-path')) ? "\Modules\\{$resourceName}s\Repositories\\" : "\App\Repositories\\");
 
         $fileContent = file_get_contents($providerPath);
 
@@ -204,13 +220,13 @@ class GenerateController extends Command
 
         $function = getFunctionContentFromFile($providerPath, $functionName, true);
 
-        $registerReadOnlyRepository = "\n\t\t// Bind ReadOnlyRepositoryInterface to {$resourceName}ReadOnlyRepository";
+        $registerReadOnlyRepository = "\n        // Bind ReadOnlyRepositoryInterface to {$resourceName}ReadOnlyRepository";
 
-        $registerReadOnlyRepository.= "\n\t\t\$this->app->when({$controllerNamespace}::class)";
+        $registerReadOnlyRepository.= "\n        \$this->app->when(\\{$controllerNamespace}::class)";
 
-        $registerReadOnlyRepository.= "\n\t\t\t->needs(\LaravelCoreModule\CoreModuleMaker\Repositories\Contracts\ReadOnlyRepositoryInterface::class)";
+        $registerReadOnlyRepository.= "\n            ->needs(\n                \LaravelCoreModule\CoreModuleMaker\Repositories\Contracts\ReadOnlyRepositoryInterface::class\n            )";
 
-        $registerReadOnlyRepository.= "\n\t\t\t->give({$repositoryNamespace}{$resourceName}ReadOnlyRepository::class);";
+        $registerReadOnlyRepository.= "\n            ->give(\\{$repositoryNamespace}::class);";
 
         $fileContent = appendCodeToFunction($fileContent, $function, getFunctionContentFromFile($providerPath, $functionName), $registerReadOnlyRepository);
 
@@ -222,17 +238,21 @@ class GenerateController extends Command
         unset($registerReadOnlyRepository);
 
 
+        $repositoryName = "{$resourceName}ReadWriteRepository";
+        $repositoryNamespace = $this->option('repository-namespace') ?? (($this->option('repository-base-path')) ? "Modules\\{$resourceName}s\Repositories" : "App\Repositories\\{$resourceName}s");
+        $repositoryNamespace = $this->ask("Enter the read write repository with his namespace ({$repositoryNamespace}\\{$repositoryName}) ", "{$repositoryNamespace}\\{$repositoryName}");
+
         $fileContent = file_get_contents($providerPath);
 
         $function = getFunctionContentFromFile($providerPath, $functionName, true);
 
-        $registerReadWriteRepository = "\n\t\t// Bind ReadWriteRepositoryInterface to {$resourceName}ReadWriteRepository";
+        $registerReadWriteRepository = "\n        // Bind ReadWriteRepositoryInterface to {$resourceName}ReadWriteRepository";
 
-        $registerReadWriteRepository.= "\n\t\t\$this->app->when({$controllerNamespace}::class)";
+        $registerReadWriteRepository.= "\n        \$this->app->when(\\{$controllerNamespace}::class)";
 
-        $registerReadWriteRepository.= "\n\t\t\t->needs(\LaravelCoreModule\CoreModuleMaker\Repositories\Contracts\ReadWriteRepositoryInterface::class)";
+        $registerReadWriteRepository.= "\n            ->needs(\n                \LaravelCoreModule\CoreModuleMaker\Repositories\Contracts\ReadWriteRepositoryInterface::class\n            )";
 
-        $registerReadWriteRepository.= "\n\t\t\t->give({$repositoryNamespace}{$resourceName}ReadWriteRepository::class);";
+        $registerReadWriteRepository.= "\n            ->give(\\{$repositoryNamespace}::class);";
 
 
         $fileContent = appendCodeToFunction($fileContent, $function, getFunctionContentFromFile($providerPath, $functionName), $registerReadWriteRepository);

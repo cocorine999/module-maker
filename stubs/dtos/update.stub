@@ -8,7 +8,6 @@ use App\Models\{{modelName}};
 use LaravelCoreModule\CoreModuleMaker\Rules\ExistsForAuthUserAndUUID;
 use LaravelCoreModule\CoreModuleMaker\DataTransfertObjects\BaseDTO;
 
-
 /**
  * Class ***`{{UpdateDtoName}}`***
  *

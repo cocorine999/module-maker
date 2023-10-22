@@ -39,7 +39,7 @@ class GenerateCreateDTO extends Command
     {
         $name      = $this->argument('name');
 
-        $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase (User) ", "User");
+        $modelName = $this->option('model') ?? $this->ask("Enter the model name CamelCase (User) ", "User");
 
         $force     = $this->option('force');
         $createDtoName   = Str::studly(convertToSnakeCase($name));

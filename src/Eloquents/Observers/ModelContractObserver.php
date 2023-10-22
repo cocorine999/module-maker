@@ -33,7 +33,6 @@ class ModelContractObserver
      */
     public function saving(ModelContract $model): void
     {
-
     }
 
 
@@ -47,7 +46,6 @@ class ModelContractObserver
      */
     public function saved(ModelContract $model): void
     {
-        
     }
 
 
@@ -89,7 +87,18 @@ class ModelContractObserver
      */
     public function creating(ModelContract $model): void
     {
+        $conditionallyUpdatableAttributes = $model->getConditionallyUpdatableAttributes();
+        
+        if (count($conditionallyUpdatableAttributes) > 0) {
 
+            foreach ($conditionallyUpdatableAttributes as $attribute) {
+
+                if ($model->isDirty($attribute)) {
+                    // Reset the attribute to its original value
+                    $model->{$attribute} = $model->getOriginal($attribute);
+                }
+            }
+        }
     }
 
 
@@ -117,7 +126,13 @@ class ModelContractObserver
      */
     public function updating(ModelContract $model): void
     {
-        //
+        $unmodifiableAttributes = $model->getUnmodifiableAttributes();
+        foreach ($unmodifiableAttributes as $attribute) {
+            if ($model->isDirty($attribute)) {
+                // Reset the attribute to its original value
+                $model->{$attribute} = $model->getOriginal($attribute);
+            }
+        }
     }
 
 
@@ -131,7 +146,6 @@ class ModelContractObserver
      */
     public function updated(ModelContract $model): void
     {
-
     }
 
 
@@ -145,7 +159,7 @@ class ModelContractObserver
      */
     public function deleting(ModelContract $model)
     {
-        dd($model);
+        //dd($model);
         if (!(in_array($model->deleteable(), $model->getFillable()) && $model->{$model->deleteable()})) {
             // Prevent the deletion from happening by returning false
             return false;
@@ -164,7 +178,6 @@ class ModelContractObserver
      */
     public function deleted(ModelContract $model): void
     {
-
     }
 
 

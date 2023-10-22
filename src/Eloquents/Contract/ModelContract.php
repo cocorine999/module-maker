@@ -129,7 +129,7 @@ class ModelContract extends Model
      *
      * @var array<int, string>
      */
-    public $default_hidden = ['status', 'created_by', 'updated_at', 'deleted_at'];
+    public $default_hidden = ['status', 'can_be_deleted', 'created_by', 'updated_at', 'deleted_at'];
 
 
     /**
@@ -247,6 +247,14 @@ class ModelContract extends Model
         return "can_be_deleted";
     }
 
+    public function getConditionallyUpdatableAttributes(): array {
+        return [];
+    }
+
+    public function getUnmodifiableAttributes() {
+        return [];
+    }
+
     public function shouldNotBeDeleted(): bool
     {
         if(in_array($this->deleteable(), $this->getFillable())){
@@ -265,4 +273,5 @@ class ModelContract extends Model
     {
         return $this->with;
     }
+    
 }

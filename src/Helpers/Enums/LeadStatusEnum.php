@@ -46,6 +46,16 @@ enum LeadStatusEnum: string implements EnumContract
     case CONVERTED = 'converted';
 
     /**
+     * Represents the lost account status.
+     */
+    case LOST = 'lost';
+
+    /**
+     * Represents the interested account status.
+     */
+    case INTERESTED = 'interested';
+
+    /**
      * Represents the closed/terminated account status.
      */
     case CLOSED = 'closed';
@@ -74,7 +84,9 @@ enum LeadStatusEnum: string implements EnumContract
         return [
             self::NEW->value         => 'New lead',
             self::QUALIFIED->value   => 'Qualified lead',
+            self::INTERESTED->value  => 'Interested lead',
             self::CONVERTED->value   => 'Converted lead',
+            self::LOST->value        => 'Lost lead',
             self::CLOSED->value      => 'Closed lead'
         ];
     }
@@ -89,8 +101,10 @@ enum LeadStatusEnum: string implements EnumContract
         return [
             self::NEW->value         => 'Represents a new lead',
             self::QUALIFIED->value   => 'Represents a qualified lead',
-            self::CONVERTED->value   => 'Represents a Converted lead',
-            self::CLOSED->value      => 'Represents Closed lead'
+            self::INTERESTED->value  => 'Represents a interested lead',
+            self::CONVERTED->value   => 'Represents a converted lead',
+            self::LOST->value        => 'Represents a lost lead',
+            self::CLOSED->value      => 'Represents closed lead'
         ];
         
     }

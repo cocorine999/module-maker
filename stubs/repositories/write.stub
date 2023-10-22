@@ -7,7 +7,6 @@ namespace {{namespace}};
 use App\Models\{{modelName}};
 use LaravelCoreModule\CoreModuleMaker\Repositories\Eloquent\EloquentReadWriteRepository;
 
-
 /**
  * ***`{{modelName}}ReadWriteRepository`***
  *

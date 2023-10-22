@@ -42,7 +42,7 @@ class GenerateRepository extends Command
         $name = $this->argument('name');
         $repositoryName = Str::studly(convertToSnakeCase($name));
 
-        $modelName = $this->option('model') ?? $modelName = $this->ask("Enter the model name CamelCase ($repositoryName) ", "$repositoryName");
+        $modelName = $this->option('model') ?? $this->ask("Enter the model name CamelCase ($repositoryName) ", "$repositoryName");
 
         $force = $this->option('force');
         $base_path = $this->option('base_path');
@@ -50,17 +50,57 @@ class GenerateRepository extends Command
         $namespace = $this->option('namespace');
         $modules = $this->option('modules');
 
-        $inter_path = null;
-        if (!$path) $inter_path = $modelName . 's';
-        if ($base_path) {
-            $path = generate_path(path: $path ? ($modules ?  "modules/{$path}" : "repositories/{$path}") : ($modules ? "modules/{$inter_path}/Repositories" : "repositories/{$inter_path}"), type: 'base');
-            $namespace = $namespace ?? ucfirst(short_path($path));
-        } else {
-            $path = generate_path(path: $path ? $path : "{$path}/Repositories/" . $inter_path);
-            $namespace = $namespace ?? ucfirst(short_path($path));
+        if(!file_exists("app/Models/{$modelName}.php")){
+            $this->warn("Model not exist");
+
+            $generate_model = $this->ask("Do you want to migrate this table (y/n) ", 'y');
+            
+            if($generate_model === 'n') return;
+            
+            // Build the arguments and options for the "generate:model" command
+            $arguments = ['name' => $modelName];
+
+            $table = convertToSnakeCase($modelName) . "s";
+
+            $options['--table'] = $table;
+
+            // Execute the "generate:model" command using the call method
+            $this->call('generate:model', array_merge($arguments, $options));
+
         }
 
-        $namespace = str_replace('/', '\\', $namespace);
+        $inter_path = null;
+        if (!$path) $inter_path = $modelName . 's';
+
+        if ($base_path) {
+
+            $path = $path ? ($modules ? "modules/{$path}" : "repositories/{$path}") : ($modules ? "modules/{$inter_path}/Repositories" : "repositories/{$inter_path}");
+
+            $path = $this->ask("Enter the path to the repository ($path) ", "$path");
+
+            $path = generate_path($path, type: 'base');
+
+            /*
+                $path = generate_path(path: $path ? ($modules ?  "modules/{$path}" : "repositories/{$path}") : ($modules ? "modules/{$inter_path}/Repositories" : "repositories/{$inter_path}"), type: 'base');
+                $namespace = $namespace ?? ucfirst(short_path($path));
+            */
+        } else {
+
+            $path = $path ? $path : "{$path}/Repositories/" . $inter_path;
+
+            $path = $this->ask("Enter the path to the repository ($path) ", "$path");
+
+            $path = generate_path($path);
+
+            /* 
+                $path = generate_path(path: $path ? $path : "{$path}/Repositories/" . $inter_path);
+                $namespace = $namespace ?? ucfirst(short_path($path));
+            */
+        }
+
+        /// $namespace = str_replace('/', '\\', $namespace);
+
+        $namespace = str_replace('/', '\\', ($namespace ?? ucfirst(short_path($path))));
 
         // Create the read-write repository class file
         $filesystem = new Filesystem();
@@ -125,5 +165,7 @@ class GenerateRepository extends Command
         $this->info("Repository " . '[' . short_path($readOnlyClassFilePath) . ']' . " created successfully.\n");
 
         if ($base_path) autoload_folder(extract_string(short_path($path)));
+
+        exec('composer dump-autoload');
     }
 }
