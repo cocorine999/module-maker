@@ -4,8 +4,6 @@ namespace LaravelCoreModule\CoreModuleMaker\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-use Spatie\Activitylog\ActivitylogServiceProvider as ActivitylogProvider;
-
 class ActivityLogServiceProvider extends ServiceProvider
 {
     /**
@@ -14,7 +12,8 @@ class ActivityLogServiceProvider extends ServiceProvider
     public function register(): void
 	{
         // Use the register method to customize the behavior of the ActivitylogServiceProvider
-        $this->app->register(ActivitylogProvider::class);
+        $this->app->register(\Spatie\Activitylog\ActivitylogServiceProvider::class);
+
 
         // You can customize the configuration of spatie/laravel-activitylog here
         $this->mergeConfigFrom(
@@ -33,8 +32,18 @@ class ActivityLogServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Publish the migrations from the spatie/laravel-activitylog package
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/path/to/migrations' => database_path('migrations'),
+            ], 'activitylog-migrations');
+        }
+
         $this->publishes([
             __DIR__.'/../config/myactivitylog.php' => config_path('myactivitylog.php'),
         ], 'config');
+
+        // $this->app['router']->middleware('activitylog', \Spatie\Activitylog\Middlewares\Activitylog::class);
+
     }
 }

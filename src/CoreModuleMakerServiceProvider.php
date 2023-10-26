@@ -18,6 +18,7 @@ use LaravelCoreModule\CoreModuleMaker\Commands\GenerateService;
 use LaravelCoreModule\CoreModuleMaker\Commands\GenerateUpdateDTO;
 use LaravelCoreModule\CoreModuleMaker\Commands\GenerateUpdateRequest;
 use LaravelCoreModule\CoreModuleMaker\Commands\RegisterDynamicProvider;
+use LaravelCoreModule\CoreModuleMaker\Providers\ActivityLogServiceProvider;
 
 class CoreModuleMakerServiceProvider extends PackageServiceProvider
 {
@@ -67,6 +68,7 @@ class CoreModuleMakerServiceProvider extends PackageServiceProvider
         //require_once(__DIR__. "/Helpers/Mixins/Helpers.php");
 
 		$this->app->register(CoreServiceProvider::class);
+		$this->app->register(ActivityLogServiceProvider::class);
         $this->publishes([
             __DIR__.'/../resources/lang' => resource_path('lang/laravel-core-modules/core-modules-maker'),
         ], 'translations');

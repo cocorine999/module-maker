@@ -96,18 +96,14 @@
     "extra": {
         "laravel": {
             "providers": [
-                "LaravelCoreModule\\CoreModuleMaker\\CoreModuleMakerServiceProvider",
-                "LaravelCoreModule\\CoreModuleMake\\ActivityLogServiceProvider"
+                "LaravelCoreModule\\CoreModuleMaker\\CoreModuleMakerServiceProvider"
             ],
             "aliases": {
                 "CoreModuleMaker": "LaravelCoreModule\\CoreModuleMaker\\Facades\\CoreModuleMaker"
             },
             "publish": {
                 "resources/lang" : "resources/lang/laravel-core-modules/core-modules-maker"
-            },
-            "config" : [
-                "myactivitylog.php"
-            ]
+            }
         }
     },
     "minimum-stability": "stable",
