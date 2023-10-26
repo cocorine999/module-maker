@@ -97,7 +97,7 @@
         "laravel": {
             "providers": [
                 "LaravelCoreModule\\CoreModuleMaker\\CoreModuleMakerServiceProvider",
-                "LaravelCoreModule\\CoreModuleMake\\Providers\\ActivityLogServiceProvider"
+                "LaravelCoreModule\\CoreModuleMake\\ActivityLogServiceProvider"
             ],
             "aliases": {
                 "CoreModuleMaker": "LaravelCoreModule\\CoreModuleMaker\\Facades\\CoreModuleMaker"
