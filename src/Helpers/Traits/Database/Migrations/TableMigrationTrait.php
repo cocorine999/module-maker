@@ -57,6 +57,28 @@ trait TableMigrationTrait
     }
     
     /**
+     * Add new columns into an existing table.
+     *
+     * This method is used to add an existing table in the database with common features that are frequently used in
+     * application tables. It modifies an existing table using the provided closure to define additional columns.
+     *
+     * @param  string   $table_name                          The name of the table to add.
+     * @param  \Closure $column_definition                   The closure defining the table columns.
+     * @return void
+     * @throws \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException  If the table does not exist.
+     */
+    protected function addTable(string $table_name, \Closure $column_definition): void
+    {
+        if (!Schema::hasTable($table_name)) {
+            throw new \LaravelCoreModule\CoreModuleMaker\Exceptions\DatabaseMigrationException("Cannot add new columns into '$table_name' table that does not exist.");
+        }
+
+        Schema::table($table_name, function (\Illuminate\Database\Schema\Blueprint $table) use ($column_definition) {
+            $column_definition($table); // Call the provided closure to define additional columns.
+        });
+    }
+    
+    /**
      * Modify a table with common features.
      *
      * This method is used to modify an existing table in the database with common features that are frequently used in
