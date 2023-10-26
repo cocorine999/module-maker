@@ -14,6 +14,7 @@ class ActivityLogServiceProvider extends ServiceProvider
         // Use the register method to customize the behavior of the ActivitylogServiceProvider
         $this->app->register(\Spatie\Activitylog\ActivitylogServiceProvider::class);
 
+        dd(__DIR__);
 
         // You can customize the configuration of spatie/laravel-activitylog here
         $this->mergeConfigFrom(
