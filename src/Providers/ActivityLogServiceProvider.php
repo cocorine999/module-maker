@@ -32,13 +32,15 @@ class ActivityLogServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        dd(dirname(__DIR__, 2));
+        
         // Publish the migrations from the spatie/laravel-activitylog package
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/path/to/migrations' => database_path('migrations'),
             ], 'activitylog-migrations');
         }
-
+        dd(dirname(__DIR__, 2));
         $this->publishes([
             __DIR__.'/../config/myactivitylog.php' => config_path('myactivitylog.php'),
         ], 'config');
