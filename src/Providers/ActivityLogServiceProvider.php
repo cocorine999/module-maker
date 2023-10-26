@@ -17,13 +17,13 @@ class ActivityLogServiceProvider extends ServiceProvider
 
         // You can customize the configuration of spatie/laravel-activitylog here
         $this->mergeConfigFrom(
-            __DIR__.'/../config/activitylog.php',
+            __DIR__.'/vendor/vendor/spatie/laravel-activitylog/config/activitylog.php',
             'activitylog'
         );
 
         // You can also publish configuration files from your package
         $this->publishes([
-            __DIR__.'/../config/activitylog.php' => config_path('activitylog.php'),
+            __DIR__.'/vendor/vendor/spatie/laravel-activitylog/config/activitylog.php' => config_path('activitylog.php'),
         ], 'config');
     }
 
