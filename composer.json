@@ -68,7 +68,7 @@
     "scripts": {
         "post-autoload-dump": [
             "@composer run prepare",
-            "@php artisan vendor:publish --tag=core-modules-maker--force"
+            "@php artisan vendor:publish --tag=core-modules-maker --force"
         ],
         "clear": "@php vendor/bin/testbench package:purge-core-modules-maker --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
@@ -96,14 +96,18 @@
     "extra": {
         "laravel": {
             "providers": [
-                "LaravelCoreModule\\CoreModuleMaker\\CoreModuleMakerServiceProvider"
+                "LaravelCoreModule\\CoreModuleMaker\\CoreModuleMakerServiceProvider",
+                "LaravelCoreModule\\CoreModuleMake\\Providers\\ActivityLogServiceProvider"
             ],
             "aliases": {
                 "CoreModuleMaker": "LaravelCoreModule\\CoreModuleMaker\\Facades\\CoreModuleMaker"
             },
             "publish": {
                 "resources/lang" : "resources/lang/laravel-core-modules/core-modules-maker"
-            }
+            },
+            "config" : [
+                "myactivitylog.php"
+            ]
         }
     },
     "minimum-stability": "stable",
