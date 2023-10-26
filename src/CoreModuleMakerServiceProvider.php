@@ -68,7 +68,7 @@ class CoreModuleMakerServiceProvider extends PackageServiceProvider
         //require_once(__DIR__. "/Helpers/Mixins/Helpers.php");
 
 		$this->app->register(CoreServiceProvider::class);
-		$this->app->register(ActivityLogServiceProvider::class);
+		///$this->app->register(ActivityLogServiceProvider::class);
         $this->publishes([
             __DIR__.'/../resources/lang' => resource_path('lang/laravel-core-modules/core-modules-maker'),
         ], 'translations');
