@@ -18,13 +18,13 @@ class ActivityLogServiceProvider extends ServiceProvider
 
         // You can customize the configuration of spatie/laravel-activitylog here
         $this->mergeConfigFrom(
-            dirname(__DIR__.'/vendor/spatie/laravel-activitylog/config/activitylog.php', 2),
+            dirname(__DIR__, 2) . '/vendor/spatie/laravel-activitylog/config/activitylog.php',
             'activitylog'
         );
 
         // You can also publish configuration files from your package
         $this->publishes([
-            dirname(__DIR__.'/vendor/spatie/laravel-activitylog/config/activitylog.php', 2) => config_path('activitylog.php'),
+            dirname(__DIR__, 2) . '/vendor/spatie/laravel-activitylog/config/activitylog.php' => config_path('activitylog.php'),
         ], 'config');
     }
 
@@ -36,11 +36,11 @@ class ActivityLogServiceProvider extends ServiceProvider
         // Publish the migrations from the spatie/laravel-activitylog package
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                dirname(__DIR__.'/vendor/spatie/laravel-activitylog/database/migrations', 2) => database_path('migrations'),
+                 dirname(__DIR__, 2) . '/vendor/spatie/laravel-activitylog/database/migrations' => database_path('migrations'),
             ], 'activitylog-migrations');
         }
         $this->publishes([
-            dirname(__DIR__.'/vendor/spatie/laravel-activitylog/config/myactivitylog.php', 2) => config_path('myactivitylog.php'),
+             dirname(__DIR__, 2) . '/vendor/spatie/laravel-activitylog/config/myactivitylog.php' => config_path('myactivitylog.php'),
         ], 'config');
 
         // $this->app['router']->middleware('activitylog', \Spatie\Activitylog\Middlewares\Activitylog::class);
